@@ -16,7 +16,8 @@ export const ProductsScreen = () => {
             const prod: BasicProductData[] = [];
             const productData = await getDocs(colRef);
             productData.docs.forEach((doc) => {
-                prod.push({ ...doc.data(), id: doc.id });
+                const data = { ...doc.data(), id: doc.id } as BasicProductData;
+                prod.push(data);
             });
             setData(prod);
         };
@@ -33,7 +34,7 @@ export const ProductsScreen = () => {
                         return a.price - b.price;
                     })
                     .map((el) => {
-                        return <Product key={el.id} props={el} />;
+                        return <Product key={el.id} productData={el} />;
                     })
             ) : (
                 <Text>Looks like there's no places to stay!</Text>

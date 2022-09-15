@@ -22,7 +22,7 @@ export const ProductViewScreen: React.FC<routeID> = ({ route }) => {
     useEffect(() => {
         const getProducts = async () => {
             const docSnap = await getDoc(docRef);
-            const thing = docSnap.data();
+            const thing = docSnap.data() as DetailedProductData;
 
             setDetailedData(thing);
         };

@@ -38,15 +38,8 @@ export const HomeScreen: React.FC<any> = () => {
             flex={1}
             alignItems="center"
             justifyContent="center">
-            {user.isAnonymous ? (
-                <Text color="plainText.800">User is a guest</Text>
-            ) : (
-                <>
-                    <Text color="plainText.800">Account Email: {user.email}</Text>
-                    <Text color="plainText.800">Email Verified: {String(user.emailVerified)}</Text>
-                </>
-            )}
-            <Text color="plainText.800">User ID: {user.uid}</Text>
+            
+            
             <Box py={3}>
                 <Text color="plainText.800" bold>
                     Really fun user data counter: {user.count}
@@ -58,14 +51,7 @@ export const HomeScreen: React.FC<any> = () => {
                     Decrement Count
                 </Button>
             </Box>
-            {user.isAnonymous ? (
-                <Button mt="2" colorScheme="indigo" onPress={() => navigation.navigate('Auth')}>
-                    Login to real account
-                </Button>
-            ) : null}
-            <Button mt="2" colorScheme="indigo" onPress={handleLoginButton}>
-                {user.loggedIn ? 'Logout' : 'Login'}
-            </Button>
+           
         </Box>
     );
 };

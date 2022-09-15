@@ -7,7 +7,11 @@ import {BasicProductData} from 'src/types/products'
 
 type ProductScreenProps = StackNavigationProp<ProductStackParam, 'Product'>;
 
-export const Product: React.FC<BasicProductData> = ({ props }) => {
+interface props {
+    productData: BasicProductData;
+}
+
+export const Product: React.FC<props> = ({ productData }) => {
     const navigation = useNavigation<ProductScreenProps>();
     // const locateProduct = (id) => {};
 
@@ -26,7 +30,7 @@ export const Product: React.FC<BasicProductData> = ({ props }) => {
             <Pressable
                 onPress={() => {
                     navigation.navigate('Product', {
-                        id: props.id,
+                        id: productData.id,
                       })
                     console.log('hello there!');
                 }}
@@ -36,15 +40,15 @@ export const Product: React.FC<BasicProductData> = ({ props }) => {
                 <Image
                     borderRadius={40}
                     source={{
-                        uri: `${props.img}`,
+                        uri: `${productData.img}`,
                     }}
                     alt="Alternate Text"
                     size="xl"
                 />
 
                 <Flex direction="row" width="60%" justifyContent="space-between">
-                    <Text>{props.name}</Text>
-                    <Text>${props.price}</Text>
+                    <Text>{productData.name}</Text>
+                    <Text>${productData.price}</Text>
                 </Flex>
             </Pressable>
         </Flex>

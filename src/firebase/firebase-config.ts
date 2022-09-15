@@ -30,6 +30,8 @@ const firebaseConfig = {
     measurementId: FIREBASE_MEASUREMENT_ID,
 };
 
+// console.log(firebaseConfig)
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 /* 
@@ -42,5 +44,6 @@ const auth = initializeAuth(app, {
 });
 // const analytics = getAnalytics(app);
 const db = getFirestore(app);
+
 
 export { app, auth, db };
