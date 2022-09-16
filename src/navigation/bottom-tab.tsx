@@ -5,11 +5,13 @@ import { ProfileScreen } from 'src/screens/profile-screen';
 import { MaterialCommunityIcons, MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { HomeStackNavigator } from './home-stack';
 import { ProductsScreen } from 'src/screens/products-screen';
+import { CartScreen } from 'src/screens/cart-screen';
 
 export type BottomTabParams = {
     HomeTab: undefined;
     Explore: undefined;
     Profile: undefined;
+    Cart: undefined;
 };
 
 const Tabs = createBottomTabNavigator<BottomTabParams>();
@@ -32,6 +34,10 @@ const ExploreIcon = ({ focused, color, size }: TabBarIconProps) => (
 
 const ProfileIcon = ({ focused, color, size }: TabBarIconProps) => (
     <AntDesign name={focused ? 'user' : 'user'} color={color} size={size} />
+);
+
+const CartIcon = ({ focused, color, size }: TabBarIconProps) => (
+    <AntDesign name={focused ? 'shoppingcart' : 'shoppingcart'} color={color} size={size} />
 );
 
 export const BottomTabNavigator: React.FC<any> = () => {
@@ -63,6 +69,16 @@ export const BottomTabNavigator: React.FC<any> = () => {
                     tabBarIcon: ExploreIcon,
                 }}
             />
+
+            <Tabs.Screen
+                name="Cart"
+                component={CartScreen}
+                options={{
+                    headerTitle: 'Cart',
+                    tabBarIcon: CartIcon,
+                }}
+            />
+
             <Tabs.Screen
                 name="Profile"
                 component={ProfileScreen}

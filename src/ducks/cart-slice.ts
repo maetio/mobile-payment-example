@@ -1,34 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { async } from '@firebase/util';
 import { number, string } from 'yup';
+import { DetailedProductData } from 'src/types/products';
 
 interface Cart {
-    cart: {
-        id: number;
-        name: string;
-        qty: number;
-        price: number;
-        img: string;
-    }[];
+    cart: DetailedProductData[];
 }
 
-const initialCart: Cart = {
-    cart: [
-        {
-            id: 1,
-            name: 'house1',
-            qty: 1,
-            price: 1000,
-            img: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=600',
-        },
-        {
-            id: 2,
-            name: 'house2',
-            qty: 1,
-            price: 2000,
-            img: 'https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=600',
-        },
-    ],
+const initialCart: Cart | [] = {
+    cart: [],
 };
 
 export const cartSlice = createSlice({
@@ -38,15 +18,29 @@ export const cartSlice = createSlice({
     name: 'cart',
     initialState: initialCart,
     reducers: {
-        addToCart: (state, action: PayloadAction<any>) => {
-            
+        addToCart: (state, action: PayloadAction<DetailedProductData>) => {
+            console.log('This is from cart state');
+            const inCart = state.cart.find((item) =>
+                item.id === action.payload.id ? true : false,
+            );
+
+            state.cart = inCart
+                ? state.cart.map((item) =>
+                      item.id === action.payload.id ? { ...action.payload } : item,
+                  )
+                : [...state.cart, { ...action.payload }];
         },
-        removeFromCart: (state, action: PayloadAction<any>) => {
-            cart: state.cart.filter((item) => item.id !== action.payload);
+        removeFromCart: (state, action: PayloadAction<string>) => {
+            state.cart = state.cart.filter((item) => item.id !== action.payload);
         },
-        adjustQty: (state, action: PayloadAction<string>) => {},
+        removeAll: (state) => {
+            state.cart = [];
+        },
+        adjustQty: (state, action: PayloadAction<string>) => {
+            state.cart;
+        },
     },
 });
 
-export const { addToCart, removeFromCart, adjustQty } = cartSlice.actions;
+export const { addToCart, removeFromCart, removeAll, adjustQty } = cartSlice.actions;
 export default cartSlice.reducer;
