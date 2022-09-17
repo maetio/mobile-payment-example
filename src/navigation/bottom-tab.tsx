@@ -3,9 +3,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import { ExploreScreen } from 'src/screens';
 import { ProfileScreen } from 'src/screens/profile-screen';
 import { MaterialCommunityIcons, MaterialIcons, AntDesign } from '@expo/vector-icons';
-import { HomeStackNavigator } from './home-stack';
 import { ProductsScreen } from 'src/screens/products-screen';
 import { CartScreen } from 'src/screens/cart-screen';
+import { HomeStackNavigator } from './home-stack';
 
 export type BottomTabParams = {
     HomeTab: undefined;

@@ -12,7 +12,6 @@ export interface User {
     count: number;
     // cart?: cartArray[] | undefined;
     cart?: any;
-    
 }
 
 // interface cartArray {

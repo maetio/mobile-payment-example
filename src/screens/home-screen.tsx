@@ -38,8 +38,6 @@ export const HomeScreen: React.FC<any> = () => {
             flex={1}
             alignItems="center"
             justifyContent="center">
-            
-            
             <Box py={3}>
                 <Text color="plainText.800" bold>
                     Really fun user data counter: {user.count}
@@ -51,7 +49,6 @@ export const HomeScreen: React.FC<any> = () => {
                     Decrement Count
                 </Button>
             </Box>
-           
         </Box>
     );
 };

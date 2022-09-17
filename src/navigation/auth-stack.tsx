@@ -14,7 +14,6 @@ export type AuthStackParams = {
 const StackNav = createNativeStackNavigator<AuthStackParams>();
 
 export const AuthStackNavigator: React.FC<any> = () => {
-
     return (
         <StackNav.Navigator screenOptions={{ gestureEnabled: true }} initialRouteName="Email">
             <StackNav.Screen

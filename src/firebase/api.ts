@@ -18,7 +18,7 @@ export { FirebaseError };
 */
 // Sign In Anonymously
 export async function anonymousSignIn() {
-    console.log(auth.config)
+    console.log(auth.config);
     // https://firebase.google.com/docs/reference/js/auth.md#signinanonymously
     return fbHandler(signInAnonymously(auth));
 }

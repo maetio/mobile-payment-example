@@ -7,6 +7,10 @@ interface Cart {
     cart: DetailedProductData[];
 }
 
+// const initialCart: DetailedProductData[] | [] = {
+//     cart: [],
+// };
+
 const initialCart: Cart | [] = {
     cart: [],
 };
@@ -20,9 +24,7 @@ export const cartSlice = createSlice({
     reducers: {
         addToCart: (state, action: PayloadAction<DetailedProductData>) => {
             console.log('This is from cart state');
-            const inCart = state.cart.find((item) =>
-                item.id === action.payload.id ? true : false,
-            );
+            const inCart = state.cart.find((item) => item.id === action.payload.id);
 
             state.cart = inCart
                 ? state.cart.map((item) =>

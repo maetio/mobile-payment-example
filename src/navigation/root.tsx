@@ -4,10 +4,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { navigationLightTheme, navigationDarkTheme } from 'src/constants/theme';
 import { useAppSelector } from 'src/hooks/useful-ducks';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { ProductViewScreen } from 'src/screens/product-view-screen';
 import { AuthStackNavigator } from './auth-stack';
 import { BottomTabNavigator } from './bottom-tab';
 // import { ProductStack } from './product-stack';
-import { ProductViewScreen } from 'src/screens/product-view-screen';
 
 export interface RootParams {
     scheme?: ColorSchemeName; // the color scheme of the app

@@ -4,8 +4,6 @@ import { CartItem } from 'src/cards/cart-item';
 import { useAppSelector } from 'src/hooks/useful-ducks';
 
 export const CartScreen = () => {
-   
-
     const cart = useAppSelector((state) => state.cart);
 
     return (

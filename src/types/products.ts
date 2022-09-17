@@ -3,7 +3,6 @@ export interface BasicProductData {
     name: string;
     price: number;
     id: string;
-    
 }
 
 type ImageMap = { [imageName: string]: string };

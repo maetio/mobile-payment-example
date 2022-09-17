@@ -1,13 +1,14 @@
 import React from 'react';
-import { Box, Text, Button } from 'native-base';
+import { Box, Text, Button, Avatar } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useAppDispatch, useAppSelector } from 'src/hooks/useful-ducks';
 import { signOutUser } from 'src/firebase/api';
 import { FontAwesome } from '@expo/vector-icons';
-import { Avatar } from 'native-base';
+
 import { HomeStackParams } from 'src/navigation/home-stack';
 import { signOut } from 'src/ducks/user-slice';
+import { removeAll } from 'src/ducks/cart-slice';
 
 type HomeScreenProps = StackNavigationProp<HomeStackParams, 'Home'>;
 
@@ -16,6 +17,7 @@ export const ProfileScreen = () => {
 
     // redux handlers
     const user = useAppSelector((state) => state.user);
+    const cart = useAppSelector((state) => state.cart);
     const dispatch = useAppDispatch();
 
     // handling button functions
@@ -78,6 +80,8 @@ export const ProfileScreen = () => {
                 </>
             )}
             <Text color="plainText.800">User ID: {user.uid}</Text> */}
+            <Button onPress={() => console.log(cart.cart)}>Check Cart</Button>
+            <Button onPress={() => dispatch(removeAll())}>Remove All From Cart</Button>
         </Box>
     );
 };
