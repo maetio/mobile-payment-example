@@ -7,18 +7,20 @@ export const productsApi = createApi({
     baseQuery: fakeBaseQuery(),
     tagTypes: ['Product'],
     endpoints: (builder) => ({
-        fetchProducts: builder.query<any, void>({
-            async queryFn() {
+        fetchProducts: builder.query<any, number>({
+            async queryFn(id) {
+                console.log('hi')
                 try {
-                    // const colRef = collection(db, 'basic-product-data');
+                    const colRef = collection(db, 'basic-product-data');
                     // add limit to products 10 items to start
-                    const colRef = collection(db, 'fdeada');
+                    // const colRef = collection(db, 'fdeada');
                     const prod: any = [];
                     const productData = await getDocs(colRef);
                     productData.docs.forEach((doc) => {
                         const data = { ...doc.data(), id: doc.id };
                         prod.push(data);
                     });
+                    console.log(prod)
                     return { data: prod };
                 } catch (err) {
                     return { error: err };
