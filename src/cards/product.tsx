@@ -8,12 +8,12 @@ import { BasicProductData, DetailedProductData } from 'src/types/products';
 
 type ProductScreenProps = StackNavigationProp<ProductStackParam, 'Product'>;
 
-interface props {
+interface CartItemParams {
     productData: BasicProductData;
     // cartData: DetailedProductData;
 }
 
-export const Product: React.FC<props> = ({ productData }) => {
+export const Product: React.FC<CartItemParams> = ({ productData }) => {
     const navigation = useNavigation<ProductScreenProps>();
     // const locateProduct = (id) => {};
 

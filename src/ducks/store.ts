@@ -20,6 +20,7 @@ const reducers = combineReducers({
 });
 
 const persistedReducers = persistReducer(persistConfig, reducers);
+
 /*
   Usage with redux persist: https://redux-toolkit.js.org/usage/usage-guide#use-with-redux-persist
   Helpful tutorial: https://edvins.io/how-to-use-redux-persist-with-redux-toolkit 

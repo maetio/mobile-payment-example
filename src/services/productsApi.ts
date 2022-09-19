@@ -11,6 +11,7 @@ export const productsApi = createApi({
             async queryFn() {
                 try {
                     // const colRef = collection(db, 'basic-product-data');
+                    // add limit to products 10 items to start
                     const colRef = collection(db, 'fdeada');
                     const prod: any = [];
                     const productData = await getDocs(colRef);
@@ -36,7 +37,7 @@ export const productsApi = createApi({
                     return { error: err };
                 }
             },
-            providesTags: ['Product'],
+            // providesTags: ['Product'],
         }),
     }),
 });
