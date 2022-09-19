@@ -3,6 +3,8 @@ This repository contains a template configured with various tools and practices 
 
 > To use this template, make sure to have the [Expo CLI](https://docs.expo.io/workflow/expo-cli/) installed and run:
 
+--changes
+
 ```bash
 expo init --template maet-expo-template
 ```

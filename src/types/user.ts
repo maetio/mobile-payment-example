@@ -10,4 +10,14 @@ export interface User {
     emailVerified: boolean | undefined;
     loggedIn: boolean | undefined;
     count: number;
+    // cart?: cartArray[] | undefined;
+    cart?: any;
 }
+
+// interface cartArray {
+//     id: number;
+//     name: string;
+//     qty: number;
+//     price: number;
+//     img: string;
+// }

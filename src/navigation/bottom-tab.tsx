@@ -1,12 +1,17 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { ExploreScreen } from 'src/screens';
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+// import { ExploreScreen } from 'src/screens';
+import { ProfileScreen } from 'src/screens/profile-screen';
+import { MaterialCommunityIcons, MaterialIcons, AntDesign } from '@expo/vector-icons';
+import { ProductsScreen } from 'src/screens/products-screen';
+import { CartScreen } from 'src/screens/cart-screen';
 import { HomeStackNavigator } from './home-stack';
 
 export type BottomTabParams = {
     HomeTab: undefined;
     Explore: undefined;
+    Profile: undefined;
+    Cart: undefined;
 };
 
 const Tabs = createBottomTabNavigator<BottomTabParams>();
@@ -27,6 +32,14 @@ const ExploreIcon = ({ focused, color, size }: TabBarIconProps) => (
     <MaterialIcons name={focused ? 'search' : 'search'} color={color} size={size} />
 );
 
+const ProfileIcon = ({ focused, color, size }: TabBarIconProps) => (
+    <AntDesign name={focused ? 'user' : 'user'} color={color} size={size} />
+);
+
+const CartIcon = ({ focused, color, size }: TabBarIconProps) => (
+    <AntDesign name={focused ? 'shoppingcart' : 'shoppingcart'} color={color} size={size} />
+);
+
 export const BottomTabNavigator: React.FC<any> = () => {
     return (
         <Tabs.Navigator>
@@ -40,12 +53,38 @@ export const BottomTabNavigator: React.FC<any> = () => {
                     tabBarIcon: HomeIcon,
                 }}
             />
-            <Tabs.Screen
+            {/* <Tabs.Screen
                 name="Explore"
                 component={ExploreScreen}
                 options={{
                     headerTitle: 'Explore',
                     tabBarIcon: ExploreIcon,
+                }}
+            /> */}
+            <Tabs.Screen
+                name="Explore"
+                component={ProductsScreen}
+                options={{
+                    headerTitle: 'Explore',
+                    tabBarIcon: ExploreIcon,
+                }}
+            />
+
+            <Tabs.Screen
+                name="Cart"
+                component={CartScreen}
+                options={{
+                    headerTitle: 'Cart',
+                    tabBarIcon: CartIcon,
+                }}
+            />
+
+            <Tabs.Screen
+                name="Profile"
+                component={ProfileScreen}
+                options={{
+                    headerTitle: 'Profile',
+                    tabBarIcon: ProfileIcon,
                 }}
             />
         </Tabs.Navigator>

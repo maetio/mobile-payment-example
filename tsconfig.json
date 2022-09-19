@@ -20,6 +20,6 @@
     "skipLibCheck": true
   },
   "extends": "expo/tsconfig.base",
-  "include": ["./*.ts", "./src/**/*.tsx", "./src/**/*.ts", "./src/*", "./assets/*", "./src/types/declarations.d.ts"],
+  "include": ["./*.ts", "./src/**/*.tsx", "./src/**/*.ts", "./src/*", "./assets/*", "./src/types/declarations.d.ts", "src/services/productsApi.ts"],
   "exclude": ["node_modules", "dist", "./*.js"]
 }
