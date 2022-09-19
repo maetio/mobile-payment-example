@@ -1,4 +1,5 @@
 import React, { useState, useEffect, SetStateAction } from 'react';
+
 import { db } from 'src/firebase/firebase-config';
 import { doc, getDoc } from 'firebase/firestore';
 import { Box, Text, Button, Input, Image, Flex } from 'native-base';
@@ -44,7 +45,8 @@ export const ProductViewScreen: React.FC<routeID> = ({ route }) => {
 
     return (
         <Box>
-            {detailedData ? (
+            {
+            detailedData ? (
                 <Box h="90%" mt="5" justifyContent="space-between" alignItems="center">
                     <Image
                         source={{
