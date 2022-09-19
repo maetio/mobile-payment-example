@@ -25,7 +25,7 @@ export const productsApi = createApi({
             },
             providesTags: ['Product'],
         }),
-        fetchDetailedProduct: builder.query({
+        fetchDetailedProduct: builder.query<any, any>({
             async queryFn(id) {
                 try {
                     const docRef = doc(db, 'detailed-product-data', id);
