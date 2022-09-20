@@ -12,6 +12,12 @@ import { AlertToast } from 'src/components/feedback/alert-toast';
 
 export const ProductsScreen = () => {
     const { data, isLoading, isError, error, isSuccess, refetch } = useFetchProductsQuery();
+    // refetch()
+
+    useEffect(()=> {
+        refetch()
+    },[])
+    
 
     const toast = useToast();
     // const [data, setData] = useState<BasicProductData[] | null>();
@@ -35,8 +41,9 @@ export const ProductsScreen = () => {
     // if (isLoading) {
     //     return <ActivityIndicator color="#36d7b7" />;
     // }
-    console.log(data);
-    console.log(error);
+
+    // console.log(data);
+    // console.log(error);
 
     // nativebase flat list, props called data
 
@@ -66,7 +73,6 @@ export const ProductsScreen = () => {
                     <FlatList
                         data={data}
                         renderItem={({ item }) => <Product productData={item} key={item.id} />}
-                        keyExtractor={(productData, index) => index.toString()}
                         showsVerticalScrollIndicator={false}></FlatList>
                 </Box>
             )}

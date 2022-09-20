@@ -1,6 +1,6 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { db } from 'src/firebase/firebase-config';
-import { collection, getDocs, doc, getDoc, Query } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, query, limit } from 'firebase/firestore';
 import { BasicProductData, DetailedProductData } from 'src/types/products';
 import { Id } from '@reduxjs/toolkit/dist/query/tsHelpers';
 
@@ -10,19 +10,21 @@ export const productsApi = createApi({
     tagTypes: ['Product'],
     endpoints: (builder) => ({
         fetchProducts: builder.query<BasicProductData[], void>({
-            async queryFn(id) {
+            async queryFn() {
                 console.log('hi');
                 try {
                     const colRef = collection(db, 'basic-product-data');
+                    const q = query(colRef, limit(3));
                     // add limit to products 10 items to start
                     // const colRef = collection(db, 'fdeada');
                     const prod: BasicProductData[] = [];
-                    const productData = await getDocs(colRef);
-                    productData.docs.forEach((doc) => {
+                    const productData = await getDocs(q);
+                    productData.docs.forEach((doc: any) => {
                         const data = { ...doc.data(), id: doc.id } as BasicProductData;
                         prod.push(data);
                     });
-                    console.log(prod);
+
+                    console.log(q);
                     return { data: prod };
                 } catch (err) {
                     return { error: err };
