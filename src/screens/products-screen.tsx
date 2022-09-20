@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
-import { Box, Text, useToast } from 'native-base';
+import { Box, Text, useToast, FlatList } from 'native-base';
 import { Product } from 'src/cards/product';
 import { db } from 'src/firebase/firebase-config';
 import { collection, getDocs } from 'firebase/firestore';
@@ -11,7 +11,7 @@ import { useFetchProductsQuery } from 'src/services/productsApi';
 import { AlertToast } from 'src/components/feedback/alert-toast';
 
 export const ProductsScreen = () => {
-    const { data, isLoading, isError, error, isSuccess, refetch } = useFetchProductsQuery(2);
+    const { data, isLoading, isError, error, isSuccess, refetch } = useFetchProductsQuery();
 
     const toast = useToast();
     // const [data, setData] = useState<BasicProductData[] | null>();
@@ -51,17 +51,26 @@ export const ProductsScreen = () => {
                 />
             )}
             {isSuccess && data && (
+                // original
+                // <Box w="100%" bg="primary.500" flex={1} justifyContent="space-around">
+                //     {[...data]
+                //         .sort((productPrice1, productPrice2) => {
+                //             return productPrice1.price - productPrice2.price;
+                //         })
+                //         .map((product) => {
+                //             return <Product key={product.id} productData={product} />;
+                //         })}
+                // </Box>
+                // flatlist
                 <Box w="100%" bg="primary.500" flex={1} justifyContent="space-around">
-                    {[...data]
-                        .sort((productPrice1, productPrice2) => {
-                            return productPrice1.price - productPrice2.price;
-                        })
-                        .map((product) => {
-                            return <Product key={product.id} productData={product} />;
-                        })}
+                    <FlatList
+                        data={data}
+                        renderItem={({ item }) => <Product productData={item} key={item.id} />}
+                        keyExtractor={(productData, index) => index.toString()}
+                        showsVerticalScrollIndicator={false}></FlatList>
                 </Box>
             )}
-            <Text>Hello</Text>
+            {/* <Text>Hello</Text> */}
         </>
     );
 };
