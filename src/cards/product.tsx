@@ -20,7 +20,7 @@ export const Product: React.FC<CartItemParams> = ({ productData }) => {
     return (
         <Flex
             // this is the format to make a button
-            width="90%"
+            width="95%"
             // maxHeight="100%"
             borderColor="lightBlue.300"
             backgroundColor="gray.700"
@@ -28,7 +28,10 @@ export const Product: React.FC<CartItemParams> = ({ productData }) => {
             alignItems="center"
             // justifyContent="center"
             p="3"
+            m="2"
+            height="280"
             borderRadius={40}>
+            
             <Pressable
                 onPress={() => {
                     navigation.navigate('Product', {

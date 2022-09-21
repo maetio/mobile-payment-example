@@ -47,7 +47,7 @@ export const ProductViewScreen: React.FC<routeID> = ({ route }) => {
     const inCart = cart.cart.find((item) => item.id === id);
 
     if (isLoading) {
-        return <ActivityIndicator />;
+        return <ActivityIndicator size="large" color="#00ff00"/>;
     }
 
     return (
