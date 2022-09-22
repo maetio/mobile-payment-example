@@ -16,6 +16,6 @@ export interface DetailedProductData {
         ac: boolean;
     };
     desc: string;
-    id: string;
-    qty: number;
+    id?: string;
+    qty?: number;
 }
