@@ -13,7 +13,7 @@ import {
     DocumentData,
 } from 'firebase/firestore';
 import { BasicProductData, DetailedProductData } from 'src/types/products';
-import { fetchInitialData, fetchDetailedData } from 'src/firebase/products-api';
+import { fetchInitialData, fetchMoreData, fetchDetailedData } from 'src/firebase/products-api';
 
 interface Fetch {
     prod: BasicProductData[];
@@ -30,7 +30,6 @@ export const productsApi = createApi({
                 console.log(lastDocument);
                 if (lastDocument === null) {
                     try {
-                      
                         const { prod, lastDoc } = await fetchInitialData();
 
                         return { data: { prod, lastDoc } };
@@ -39,24 +38,9 @@ export const productsApi = createApi({
                     }
                 } else {
                     try {
-                        const colRef = collection(db, 'basic-product-data');
-                        const q = query(
-                            colRef,
-                            orderBy('price'),
-                            startAfter(lastDocument),
-                            limit(3),
-                        );
-                        const prod: BasicProductData[] = [];
-                        const productData = await getDocs(q);
+                        const { prod, lastDoc } = await fetchMoreData(lastDocument);
 
-                        const lastDoc = productData.docs[productData.docs.length - 1];
-
-                        productData.docs.forEach((doc: any) => {
-                            const data = { ...doc.data(), id: doc.id } as BasicProductData;
-                            prod.push(data);
-                        });
-
-                        return { data: { prod: prod, lastDoc: lastDoc } };
+                        return { data: { prod, lastDoc } };
                     } catch (err) {
                         return { error: err };
                     }
@@ -64,25 +48,7 @@ export const productsApi = createApi({
             },
             providesTags: ['Product'],
         }),
-        // fetchMoreProducts: builder.query<BasicProductData[], void>({
-        //     async queryFn() {
-        //         console.log('hi');
-        //         try {
-        //             const colRef = collection(db, 'basic-product-data');
-        //             const q = query(colRef, orderBy('price'), limit(3));
-        //             const prod: BasicProductData[] = [];
-        //             const productData = await getDocs(q);
-        //             productData.docs.forEach((doc: any) => {
-        //                 const data = { ...doc.data(), id: doc.id } as BasicProductData;
-        //                 prod.push(data);
-        //             });
-        //             return { data: prod };
-        //         } catch (err) {
-        //             return { error: err };
-        //         }
-        //     },
-        //     providesTags: ['Product'],
-        // }),
+
         fetchDetailedProduct: builder.query<DetailedProductData, string>({
             async queryFn(id) {
                 try {
@@ -92,7 +58,7 @@ export const productsApi = createApi({
                     return { error: err };
                 }
             },
-            // providesTags: ['Product'],
+            providesTags: ['Product'],
         }),
     }),
 });

@@ -7,11 +7,11 @@ export const converters: { [t: string]: FirestoreDataConverter<any> } = {
             return productData;
         },
         fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions) => {
-            const parameters = snapshot.data(options);
+            const data = snapshot.data(options);
             const productData: BasicProductData = {
-                img: parameters.img || null,
-                name: parameters.name || null,
-                price: parameters.price || null,
+                img: data.img || null,
+                name: data.name || null,
+                price: data.price || null,
             };
             return productData;
         },
