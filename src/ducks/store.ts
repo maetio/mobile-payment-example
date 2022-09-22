@@ -3,7 +3,7 @@ import { persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } fro
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import userReducer from './user-slice';
 import cartReducer from './cart-slice';
-import { productsApi } from 'src/services/productsApi';
+import { productsApi } from 'src/services/products-queries'
 import { setupListeners } from '@reduxjs/toolkit/dist/query';
 
 const persistConfig = {

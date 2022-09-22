@@ -6,7 +6,7 @@ import { Box, Text, Button, Input, Image, Flex } from 'native-base';
 import { DetailedProductData } from 'src/types/products';
 import { useAppDispatch, useAppSelector } from 'src/hooks/useful-ducks';
 import { addToCart } from 'src/ducks/cart-slice';
-import { useFetchDetailedProductQuery } from 'src/services/productsApi';
+import { useFetchDetailedProductQuery } from 'src/services/products-queries';
 
 interface routeID {
     children: React.ReactNode;
@@ -47,7 +47,7 @@ export const ProductViewScreen: React.FC<routeID> = ({ route }) => {
     const inCart = cart.cart.find((item) => item.id === id);
 
     if (isLoading) {
-        return <ActivityIndicator size="large" color="#00ff00"/>;
+        return <ActivityIndicator size="large" color="#00ff00" />;
     }
 
     return (

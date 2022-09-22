@@ -7,7 +7,7 @@ import { Product } from 'src/cards/product';
 import { string } from 'yup';
 import { number } from 'yup/lib/locale';
 import { BasicProductData } from 'src/types/products';
-import { useFetchProductsQuery } from 'src/services/productsApi';
+import { useFetchProductsQuery } from 'src/services/products-queries';
 import { AlertToast } from 'src/components/feedback/alert-toast';
 import { async } from '@firebase/util';
 
@@ -33,11 +33,19 @@ export const ProductsScreen = () => {
     const [lastDocSaved, setLastDocSaved] = useState<any>();
     const [lastPostStatus, setLastPostStatus] = useState(false);
     const { data, isLoading, isError, error, isSuccess, refetch } = useFetchProductsQuery(null);
-    console.log(data?.lastDoc)
+    console.log(data?.lastDoc);
 
     useEffect(() => {
-        
+        if (data) {
+            setProducts(data.prod);
+            setLastDocSaved(data.lastDoc);
+        }
     }, []);
+
+   
+
+    // console.log(lastDocSaved);
+    console.log(data?.lastDoc)
 
     // const getPost = async () => {
     //     const postData = await fetchData();

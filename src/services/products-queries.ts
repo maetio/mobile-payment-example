@@ -9,13 +9,15 @@ import {
     limit,
     orderBy,
     startAfter,
+    QueryDocumentSnapshot,
+    DocumentData,
 } from 'firebase/firestore';
 import { BasicProductData, DetailedProductData } from 'src/types/products';
-import { Id } from '@reduxjs/toolkit/dist/query/tsHelpers';
+import { fetchInitialData, fetchDetailedData } from 'src/firebase/products-api';
 
 interface Fetch {
     prod: BasicProductData[];
-    lastDoc: any;
+    lastDoc: QueryDocumentSnapshot<DocumentData>;
 }
 
 export const productsApi = createApi({
@@ -23,24 +25,13 @@ export const productsApi = createApi({
     baseQuery: fakeBaseQuery(),
     tagTypes: ['Product'],
     endpoints: (builder) => ({
-        fetchProducts: builder.query<Fetch, void | any>({
+        fetchProducts: builder.query<Fetch, void | null>({
             async queryFn(lastDocument) {
                 console.log(lastDocument);
                 if (lastDocument === null) {
                     try {
-                        const colRef = collection(db, 'basic-product-data');
-                        const q = query(colRef, orderBy('price'), limit(3));
-                        const prod: BasicProductData[] = [];
-                        const productData = await getDocs(q);
-
-                        const lastDoc = productData.docs[productData.docs.length - 1];
-                        
-                        console.log(lastDoc);
-
-                        productData.docs.forEach((doc: any) => {
-                            const datas = { ...doc.data(), id: doc.id } as BasicProductData;
-                            prod.push(datas);
-                        });
+                      
+                        const { prod, lastDoc } = await fetchInitialData();
 
                         return { data: { prod, lastDoc } };
                     } catch (err) {
@@ -95,10 +86,8 @@ export const productsApi = createApi({
         fetchDetailedProduct: builder.query<DetailedProductData, string>({
             async queryFn(id) {
                 try {
-                    const docRef = doc(db, 'detailed-product-data', id);
-                    const docSnap = await getDoc(docRef);
-                    const thing = { ...docSnap.data(), id } as DetailedProductData;
-                    return { data: thing };
+                    const detailedProductData = await fetchDetailedData(id);
+                    return { data: detailedProductData };
                 } catch (err) {
                     return { error: err };
                 }
