@@ -8,17 +8,12 @@ import { BasicProductData } from 'src/types/products';
 import { useFetchProductsQuery } from 'src/services/products-queries';
 import { AlertToast } from 'src/components/feedback/alert-toast';
 
-// extra imports for test
-import {} from 'src/firebase/products-api';
-// end of extra imports
-
 export const ProductsScreen = () => {
     // RTK Query Example/Test
 
     const [products, setProducts] = useState<BasicProductData[] | undefined>();
     const [lastDocID, setLastDocID] = useState<any>(undefined);
-
-    // const [lastPostStatus, setLastPostStatus] = useState(false);
+    const [lastPostStatus, setLastPostStatus] = useState(false);
 
     /*
         Seth Notes for Pagination:
@@ -35,7 +30,7 @@ export const ProductsScreen = () => {
 
     */
 
-    const { data, isFetching, isError, error, isSuccess, refetch } =
+    const { data, isFetching, isLoading, isError, error, isSuccess, refetch } =
         useFetchProductsQuery(lastDocID);
 
     // 100% working infinite scrole WITHOUT RTK query
@@ -47,13 +42,14 @@ export const ProductsScreen = () => {
         // }
 
         setProducts(data);
-        console.log(data);
     }, []);
 
     useEffect(() => {
         if (!isFetching) {
             if (products !== undefined && data !== undefined) {
                 setProducts([...products, ...data]);
+
+                data.length === 0 ? setLastPostStatus(true) : setLastPostStatus(false);
             }
         }
     }, [data]);
@@ -76,13 +72,10 @@ export const ProductsScreen = () => {
         // setLastDocSaved(postData.lastDoc);
         // setProducts([...products, ...postData.prod]);
 
-        // if (postData.prod.length === 0) {
-        //     setLastPostStatus(true);
-        // } else {
-        //     setLastPostStatus(false);
-        // }
         // }
     };
+
+    const refreshFuntion = () => {};
 
     // END of 100% working infinite scroll WITHOUT RTK query
 
@@ -92,24 +85,27 @@ export const ProductsScreen = () => {
 
     return (
         <>
-            {/* {isLoading && <ActivityIndicator color="#36d7b7" />}
+            {isLoading && <ActivityIndicator color="#36d7b7" />}
             {isError && <Text>Something went wrong</Text>}
-            {isSuccess && data && ( */}
-
-            <Box w="100%" bg="primary.500" flex={1} justifyContent="space-around">
-                <FlatList
-                    data={products}
-                    renderItem={({ item }) => <Product productData={item} key={item.id} />}
-                    showsVerticalScrollIndicator={false}
-                    onEndReached={getMorePosts}
-                    onEndReachedThreshold={0.01}
-                    scrollEventThrottle={150}
-                    // ListFooterComponent={() => (!lastPostStatus ? <Spinner /> : null)}
-                    refreshing={isFetching}
-                    onRefresh={() => refetch()}
-                    ListFooterComponent={() => <Spinner />}
-                />
-            </Box>
+            {isSuccess && data && (
+                <Box w="100%" bg="primary.500" flex={1} justifyContent="space-around">
+                    <FlatList
+                        data={products}
+                        renderItem={({ item }) => <Product productData={item} key={item.id} />}
+                        showsVerticalScrollIndicator={false}
+                        onEndReached={!lastPostStatus ? getMorePosts : null}
+                        onEndReachedThreshold={0.01}
+                        scrollEventThrottle={150}
+                        ListFooterComponent={() => (!lastPostStatus ? <Spinner /> : null)}
+                        refreshing={isFetching}
+                        onRefresh={() => {
+                            setProducts([]);
+                            refetch();
+                            setLastDocID(undefined);
+                        }}
+                    />
+                </Box>
+            )}
         </>
     );
 };
