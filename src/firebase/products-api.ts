@@ -19,37 +19,59 @@ interface Thing {
     id: string;
 }
 
-export const fetchInitialData = async () => {
-    const colRef = collection(db, 'basic-product-data').withConverter(converters.productData);
-    const q = query(colRef, orderBy('price'), limit(3));
+export const fetchProducts = async (lastDocumentID: string | undefined) => {
+    const colRef = collection(db, 'basic-product-data').withConverter<BasicProductData>(
+        converters.productData,
+    );
+
+    const lastVisible = lastDocumentID ? await getDoc(doc(colRef, lastDocumentID)) : null;
+
+    const q = lastVisible
+        ? query(colRef, orderBy('price'), startAfter(lastVisible), limit(3))
+        : query(colRef, orderBy('price'), limit(3));
     const productData = await getDocs(q);
 
     const prod: BasicProductData[] = [];
-
-    const lastDoc = productData.docs[productData.docs.length - 1];
 
     productData.docs.forEach((doc) => {
         const datas = { ...doc.data(), id: doc.id };
         prod.push(datas);
     });
 
-    return { prod, lastDoc };
+    return prod;
 };
 
-export const fetchMoreData = async (lastItemDocument: any) => {
-    const colRef = collection(db, 'basic-product-data').withConverter(converters.productData);
-    const q = query(colRef, orderBy('price'), startAfter(lastItemDocument), limit(3));
-    const prod: BasicProductData[] = [];
-    const productData = await getDocs(q);
+// export const fetchInitialData = async () => {
+//     const colRef = collection(db, 'basic-product-data').withConverter(converters.productData);
+//     const q = query(colRef, orderBy('price'), limit(3));
+//     const productData = await getDocs(q);
 
-    const lastDoc = productData.docs[productData.docs.length - 1];
+//     const prod: BasicProductData[] = [];
 
-    productData.docs.forEach((doc) => {
-        const data = { ...doc.data(), id: doc.id };
-        prod.push(data);
-    });
-    return { prod, lastDoc };
-};
+//     const lastDoc = productData.docs[productData.docs.length - 1];
+
+//     productData.docs.forEach((doc) => {
+//         const datas = { ...doc.data(), id: doc.id };
+//         prod.push(datas);
+//     });
+
+//     return { prod, lastDoc };
+// };
+
+// export const fetchMoreData = async (lastItemDocument: any) => {
+//     const colRef = collection(db, 'basic-product-data').withConverter(converters.productData);
+//     const q = query(colRef, orderBy('price'), startAfter(lastItemDocument), limit(3));
+//     const prod: BasicProductData[] = [];
+//     const productData = await getDocs(q);
+
+//     const lastDoc = productData.docs[productData.docs.length - 1];
+
+//     productData.docs.forEach((doc) => {
+//         const data = { ...doc.data(), id: doc.id };
+//         prod.push(data);
+//     });
+//     return { prod, lastDoc };
+// };
 
 export const fetchDetailedData = async (id: string) => {
     const docRef = doc(db, 'detailed-product-data', id).withConverter(

@@ -13,37 +13,47 @@ import {
     DocumentData,
 } from 'firebase/firestore';
 import { BasicProductData, DetailedProductData } from 'src/types/products';
-import { fetchInitialData, fetchMoreData, fetchDetailedData } from 'src/firebase/products-api';
-
-interface Fetch {
-    prod: BasicProductData[];
-    lastDoc: QueryDocumentSnapshot<DocumentData>;
-}
+import { fetchDetailedData, fetchProducts } from 'src/firebase/products-api';
 
 export const productsApi = createApi({
     reducerPath: 'productsApi',
     baseQuery: fakeBaseQuery(),
     tagTypes: ['Product'],
     endpoints: (builder) => ({
-        fetchProducts: builder.query<Fetch, void | null>({
-            async queryFn(lastDocument) {
-                console.log(lastDocument);
-                if (lastDocument === null) {
-                    try {
-                        const { prod, lastDoc } = await fetchInitialData();
+        // fetchProducts: builder.query<Fetch, void | null>({
+        //     async queryFn(lastDocument) {
+        //         console.log(lastDocument);
+        //         if (lastDocument === null) {
+        //             try {
+        //                 const { prod, lastDoc } = await fetchInitialData();
 
-                        return { data: { prod, lastDoc } };
-                    } catch (err) {
-                        return { error: err };
-                    }
-                } else {
-                    try {
-                        const { prod, lastDoc } = await fetchMoreData(lastDocument);
+        //                 return { data: { prod, lastDoc } };
+        //             } catch (err) {
+        //                 return { error: err };
+        //             }
+        //         } else {
+        //             try {
+        //                 const { prod, lastDoc } = await fetchMoreData(lastDocument);
 
-                        return { data: { prod, lastDoc } };
-                    } catch (err) {
-                        return { error: err };
-                    }
+        //                 return { data: { prod, lastDoc } };
+        //             } catch (err) {
+        //                 return { error: err };
+        //             }
+        //         }
+        //     },
+        //     providesTags: ['Product'],
+        // }),
+
+        fetchProducts: builder.query<BasicProductData[], string | undefined>({
+            async queryFn(lastDocID) {
+                console.log(lastDocID);
+
+                try {
+                    const prod = await fetchProducts(lastDocID);
+
+                    return { data: prod };
+                } catch (err) {
+                    return { error: err };
                 }
             },
             providesTags: ['Product'],

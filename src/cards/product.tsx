@@ -31,7 +31,6 @@ export const Product: React.FC<CartItemParams> = ({ productData }) => {
             m="2"
             height="280"
             borderRadius={40}>
-            
             <Pressable
                 onPress={() => {
                     navigation.navigate('Product', {
