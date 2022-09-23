@@ -28,8 +28,6 @@ export const fetchInitialData = async () => {
 
     const lastDoc = productData.docs[productData.docs.length - 1];
 
-    console.log(lastDoc);
-
     productData.docs.forEach((doc) => {
         const datas = { ...doc.data(), id: doc.id };
         prod.push(datas);

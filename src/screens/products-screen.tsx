@@ -16,47 +16,47 @@ export const ProductsScreen = () => {
     // RTK Query Example/Test
 
     const [products, setProducts] = useState<BasicProductData[] | null>();
-    // const [lastDocument, setLastDocument] = useState<any>(null);
     const [lastDocSaved, setLastDocSaved] = useState<any>();
-    const [lastPostStatus, setLastPostStatus] = useState(false);
-    // const { data, isLoading, isError, error, isSuccess, refetch } = useFetchProductsQuery(null);
+
+    // const [lastPostStatus, setLastPostStatus] = useState(false);
+
+    const { data, isLoading, isError, error, isSuccess, refetch } = useFetchProductsQuery(null);
 
     // 100% working infinite scrole WITHOUT RTK query
 
     useEffect(() => {
         getPost();
+        if (data && lastDocSaved) {
+            console.log(data.lastDoc === lastDocSaved);
+        }
     }, []);
 
     const getPost = async () => {
-        const postData = await fetchInitialData();
-        setProducts(postData.prod);
-        setLastDocSaved(postData.lastDoc);
+        const { prod, lastDoc } = await fetchInitialData();
+        setProducts(prod);
+        setLastDocSaved(lastDoc);
     };
 
     const getMorePosts = async () => {
-        if (!lastPostStatus) {
-            console.log('hey');
-            const postData = await fetchMoreData(lastDocSaved);
-            // console.log(postData.prod);
-            setLastDocSaved(postData.lastDoc);
-            setProducts([...products, ...postData.prod]);
-            console.log(products);
-            if (postData.prod.length === 0) {
-                setLastPostStatus(true);
-            } else {
-                setLastPostStatus(false);
-            }
-        }
+        // if (!lastPostStatus) {
+
+        const postData = await fetchMoreData(lastDocSaved);
+        setLastDocSaved(postData.lastDoc);
+        setProducts([...products, ...postData.prod]);
+
+        // if (postData.prod.length === 0) {
+        //     setLastPostStatus(true);
+        // } else {
+        //     setLastPostStatus(false);
+        // }
+        // }
     };
 
     // END of 100% working infinite scroll WITHOUT RTK query
 
-  
-
     // if (isLoading) {
     //     return <ActivityIndicator color="#36d7b7" />;
     // }
-
 
     return (
         <>
@@ -72,7 +72,8 @@ export const ProductsScreen = () => {
                     onEndReached={getMorePosts}
                     onEndReachedThreshold={0.01}
                     scrollEventThrottle={150}
-                    ListFooterComponent={() => (!lastPostStatus ? <Spinner /> : null)}
+                    // ListFooterComponent={() => (!lastPostStatus ? <Spinner /> : null)}
+                    ListFooterComponent={() => <Spinner />}
                 />
             </Box>
         </>
