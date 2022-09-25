@@ -20,33 +20,10 @@ export const productsApi = createApi({
     baseQuery: fakeBaseQuery(),
     tagTypes: ['Product'],
     endpoints: (builder) => ({
-        // fetchProducts: builder.query<Fetch, void | null>({
-        //     async queryFn(lastDocument) {
-        //         console.log(lastDocument);
-        //         if (lastDocument === null) {
-        //             try {
-        //                 const { prod, lastDoc } = await fetchInitialData();
-
-        //                 return { data: { prod, lastDoc } };
-        //             } catch (err) {
-        //                 return { error: err };
-        //             }
-        //         } else {
-        //             try {
-        //                 const { prod, lastDoc } = await fetchMoreData(lastDocument);
-
-        //                 return { data: { prod, lastDoc } };
-        //             } catch (err) {
-        //                 return { error: err };
-        //             }
-        //         }
-        //     },
-        //     providesTags: ['Product'],
-        // }),
-
         fetchProducts: builder.query<BasicProductData[], string | undefined>({
             async queryFn(lastDocID) {
                 console.log(lastDocID);
+                console.log('from query');
 
                 try {
                     const prod = await fetchProducts(lastDocID);
@@ -68,7 +45,7 @@ export const productsApi = createApi({
                     return { error: err };
                 }
             },
-            providesTags: ['Product'],
+            // providesTags: ['Product'],
         }),
     }),
 });

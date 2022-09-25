@@ -6,13 +6,12 @@ import { string } from 'yup';
 import { number } from 'yup/lib/locale';
 import { BasicProductData } from 'src/types/products';
 import { useFetchProductsQuery } from 'src/services/products-queries';
-import { AlertToast } from 'src/components/feedback/alert-toast';
 
 export const ProductsScreen = () => {
     // RTK Query Example/Test
 
     const [products, setProducts] = useState<BasicProductData[] | undefined>();
-    const [lastDocID, setLastDocID] = useState<any>(undefined);
+    const [lastDocID, setLastDocID] = useState<string | undefined>(undefined);
     const [lastPostStatus, setLastPostStatus] = useState(false);
 
     /*
@@ -30,29 +29,56 @@ export const ProductsScreen = () => {
 
     */
 
-    const { data, isFetching, isLoading, isError, error, isSuccess, refetch } =
-        useFetchProductsQuery(lastDocID);
+    const {
+        data = [],
+        isFetching,
+        isLoading,
+        isError,
+        error,
+        isSuccess,
+        refetch,
+    } = useFetchProductsQuery(lastDocID);
 
-    // 100% working infinite scrole WITHOUT RTK query
+
+    // useEffect(() => {
+    //     // getPost();
+    //     // if (data && lastDocSaved) {
+    //     //     console.log(data.lastDoc === lastDocSaved);
+    //     // }
+
+    //     setProducts(data);
+    // }, []);
 
     useEffect(() => {
-        // getPost();
-        // if (data && lastDocSaved) {
-        //     console.log(data.lastDoc === lastDocSaved);
-        // }
+        if (!lastDocID) {
+            setProducts(data);
+            console.log('fired from !lastDoc');
+        } else {
+            if (!isFetching && products && data) {
+                console.log('fired');
 
-        setProducts(data);
-    }, []);
-
-    useEffect(() => {
-        if (!isFetching) {
-            if (products !== undefined && data !== undefined) {
                 setProducts([...products, ...data]);
 
-                data.length === 0 ? setLastPostStatus(true) : setLastPostStatus(false);
+                // console.log('fired from lastDoc');
             }
         }
+
+        data?.length === 0 ? setLastPostStatus(true) : setLastPostStatus(false);
+
+        console.log(data?.length);
+        console.log(data);
     }, [data]);
+
+    // useEffect(() => {
+    //     // console.log(data);
+    //     // console.log('isFetching');
+    // }, [isFetching]);
+
+    useEffect(() => {
+        if (!lastDocID) {
+            refetch();
+        }
+    }, [lastDocID]);
 
     // const getPost = async () => {
     //     const { prod, lastDoc } = await fetchInitialData();
@@ -61,51 +87,48 @@ export const ProductsScreen = () => {
     // };
 
     const getMorePosts = async () => {
-        if (data) {
-            const lastID = data[data.length - 1].id;
-            setLastDocID(lastID);
-        }
+        console.log(lastPostStatus);
 
-        // if (!lastPostStatus) {
-
-        // const postData = await fetchMoreData(lastDocSaved);
-        // setLastDocSaved(postData.lastDoc);
-        // setProducts([...products, ...postData.prod]);
-
-        // }
+        const lastID = data[data.length - 1].id;
+        console.log('getmore');
+        setLastDocID(lastID);
     };
 
-    const refreshFuntion = () => {};
+    const refreshFuntion = () => {
+        setLastPostStatus(false);
+        setLastDocID(undefined);
+        refetch();
+    };
 
-    // END of 100% working infinite scroll WITHOUT RTK query
 
     // if (isLoading) {
     //     return <ActivityIndicator color="#36d7b7" />;
     // }
 
+    console.log(error);
+    console.log(data);
+    console.log(lastDocID);
+    console.log(lastPostStatus);
+
     return (
         <>
-            {isLoading && <ActivityIndicator color="#36d7b7" />}
-            {isError && <Text>Something went wrong</Text>}
-            {isSuccess && data && (
-                <Box w="100%" bg="primary.500" flex={1} justifyContent="space-around">
-                    <FlatList
-                        data={products}
-                        renderItem={({ item }) => <Product productData={item} key={item.id} />}
-                        showsVerticalScrollIndicator={false}
-                        onEndReached={!lastPostStatus ? getMorePosts : null}
-                        onEndReachedThreshold={0.01}
-                        scrollEventThrottle={150}
-                        ListFooterComponent={() => (!lastPostStatus ? <Spinner /> : null)}
-                        refreshing={isFetching}
-                        onRefresh={() => {
-                            setProducts([]);
-                            refetch();
-                            setLastDocID(undefined);
-                        }}
-                    />
-                </Box>
-            )}
+            {/* {isLoading && <ActivityIndicator color="#36d7b7" />} */}
+            {/* {isError && <Text>Something went wrong, Error</Text>} */}
+            {/* {isSuccess && data && ( */}
+            <Box w="100%" bg="primary.500" flex={1} justifyContent="space-around">
+                <FlatList
+                    data={products}
+                    renderItem={({ item }) => <Product productData={item} key={item.id} />}
+                    showsVerticalScrollIndicator={false}
+                    onEndReached={!lastPostStatus ? getMorePosts : null}
+                    onEndReachedThreshold={0.01}
+                    scrollEventThrottle={150}
+                    ListFooterComponent={() => (!lastPostStatus ? <Spinner /> : null)}
+                    refreshing={isFetching}
+                    onRefresh={refreshFuntion}
+                />
+            </Box>
+            {/* )} */}
         </>
     );
 };
