@@ -40,6 +40,9 @@ export const productsApi = createApi({
             async queryFn(id) {
                 try {
                     const detailedProductData = await fetchDetailedData(id);
+                    // const detailedProductData = await fetchDetailedData('wu2BCUA6KtmPZMAw2BN1');
+                    // const detailedProductData = await fetchDetailedData('jl91Kk7SIXHQoNFGun9T');
+
                     return { data: detailedProductData };
                 } catch (err) {
                     return { error: err };

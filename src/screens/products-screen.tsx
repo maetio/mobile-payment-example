@@ -39,7 +39,6 @@ export const ProductsScreen = () => {
         refetch,
     } = useFetchProductsQuery(lastDocID);
 
-
     // useEffect(() => {
     //     // getPost();
     //     // if (data && lastDocSaved) {
@@ -52,6 +51,7 @@ export const ProductsScreen = () => {
     useEffect(() => {
         if (!lastDocID) {
             setProducts(data);
+            refetch();
             console.log('fired from !lastDoc');
         } else {
             if (!isFetching && products && data) {
@@ -63,7 +63,7 @@ export const ProductsScreen = () => {
             }
         }
 
-        data?.length === 0 ? setLastPostStatus(true) : setLastPostStatus(false);
+        data.length === 0 ? setLastPostStatus(true) : setLastPostStatus(false);
 
         console.log(data?.length);
         console.log(data);
@@ -99,7 +99,6 @@ export const ProductsScreen = () => {
         setLastDocID(undefined);
         refetch();
     };
-
 
     // if (isLoading) {
     //     return <ActivityIndicator color="#36d7b7" />;
