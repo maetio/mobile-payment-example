@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { emailSchema } from 'src/utils/schemas';
 import { FormInput } from 'src/components/user-input';
 import { KeyboardBehaviorWrapper } from 'src/components/wrappers';
-import { anonymousSignIn, fetchSignInMethods } from 'src/firebase/api';
+import { anonymousSignIn, fetchSignInMethods } from 'src/firebase/auth-api';
 import { useAppSelector, useAppDispatch } from 'src/hooks/useful-ducks';
 import { guestSignIn } from 'src/ducks/user-slice';
 import { AuthStackParams } from 'src/navigation/auth-stack';

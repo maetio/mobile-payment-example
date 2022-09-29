@@ -3,7 +3,7 @@ import { Box, Text, Button, Avatar } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useAppDispatch, useAppSelector } from 'src/hooks/useful-ducks';
-import { signOutUser } from 'src/firebase/api';
+import { signOutUser } from 'src/firebase/auth-api';
 import { FontAwesome } from '@expo/vector-icons';
 
 import { HomeStackParams } from 'src/navigation/home-stack';

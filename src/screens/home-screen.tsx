@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Box, Button, Text } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useAppDispatch, useAppSelector } from 'src/hooks/useful-ducks';
-import { signOutUser } from 'src/firebase/api';
+import { signOutUser } from 'src/firebase/auth-api';
 import { incrementCount, decrementCount, signOut } from 'src/ducks/user-slice';
 import { HomeStackParams } from 'src/navigation/home-stack';
 
@@ -38,7 +38,7 @@ export const HomeScreen: React.FC<any> = () => {
             flex={1}
             alignItems="center"
             justifyContent="center">
-            <Box py={3}>
+            {/* <Box py={3}>
                 <Text color="plainText.800" bold>
                     Really fun user data counter: {user.count}
                 </Text>
@@ -48,7 +48,7 @@ export const HomeScreen: React.FC<any> = () => {
                 <Button m={2} onPress={() => dispatch(decrementCount())}>
                     Decrement Count
                 </Button>
-            </Box>
+            </Box> */}
         </Box>
     );
 };

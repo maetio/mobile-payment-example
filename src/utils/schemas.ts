@@ -24,6 +24,9 @@ export const signupSchema = yup.object().shape({
         },
     }),
 });
+export const passwordSchema = yup.object().shape({
+    password: yup.string().required('Password is required'),
+});
 
 // define login schema
 export const loginSchema = yup.object().shape({

@@ -53,3 +53,23 @@ export const fbHandler = async (fbQuery: Promise<any>) => {
         throw fbError;
     }
 };
+
+export const firestoreGetHandler = async <T>(firestoreQuery: Promise<T>) => {
+    const result = await fbHandler(firestoreQuery);
+
+    // throw if firebase error
+    if (result.name && result.message && result.code && result.errorCause) {
+        throw result;
+    }
+
+    if (result.exists()) {
+        return result.data();
+    }
+    const fbError: FirebaseError = {
+        name: 'Firebase Error',
+        message: 'Document does not exist',
+        code: 'firestore/does-not-exist',
+        errorCause: 'firestore-document',
+    };
+    throw fbError;
+};
