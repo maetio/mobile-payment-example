@@ -9,7 +9,6 @@ const initialUser: User = {
     isAnonymous: false,
     emailVerified: false,
     loggedIn: false,
-    count: 0,
 };
 
 export const userSlice = createSlice({
@@ -40,15 +39,8 @@ export const userSlice = createSlice({
             state.email = action.payload;
             state.loggedIn = true;
         },
-        incrementCount: (state) => {
-            state.count += 1;
-        },
-        decrementCount: (state) => {
-            state.count -= 1;
-        },
     },
 });
 
-export const { emailSignIn, guestSignIn, signOut, updateEmail, incrementCount, decrementCount } =
-    userSlice.actions;
+export const { emailSignIn, guestSignIn, signOut, updateEmail } = userSlice.actions;
 export default userSlice.reducer;

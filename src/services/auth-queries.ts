@@ -16,6 +16,13 @@ import { initializeUser, User } from 'src/types/user';
 import { getUser, updateUser } from 'src/firebase/auth-db-api';
 import { emptyFirebaseApi } from './emptyFirebaseApi';
 
+
+// import { emailSignIn } from 'src/ducks/user-slice';
+// import { useAppDispatch } from 'src/hooks/useful-ducks';
+
+// const dispatch = useAppDispatch();
+
+
 /*
     Check documentation resources for additional questions
     Customizing RTK Query with 
@@ -87,6 +94,7 @@ export const firebaseAuthApi = emptyFirebaseApi.injectEndpoints({
                         console.log(newUser);
                         // store user data in firestore
                         await updateUser(newUser, true);
+                        // dispatch(emailSignIn(newUser));
                         return { data: newUser };
                     } catch (e: any) {
                         console.log(`Error with sign up: ${e}`);
@@ -104,9 +112,11 @@ export const firebaseAuthApi = emptyFirebaseApi.injectEndpoints({
                 try {
                     // sign in new user and get data from database
                     const { user } = await signInWithEmail(email, password);
+                    console.log(user)
                     const newUser = await getUser(user.uid);
+                    // dispatch(emailSignIn(newUser));
                     console.log('signed in');
-                    console.log(newUser);
+                    // console.log(newUser);
                     return { data: { ...newUser, loggedIn: true } };
                 } catch (e: any) {
                     console.log(`Error with login: ${e}`);

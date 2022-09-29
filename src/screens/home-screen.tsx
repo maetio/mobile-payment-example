@@ -4,7 +4,7 @@ import { Box, Button, Text } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useAppDispatch, useAppSelector } from 'src/hooks/useful-ducks';
 import { signOutUser } from 'src/firebase/auth-api';
-import { incrementCount, decrementCount, signOut } from 'src/ducks/user-slice';
+import { signOut } from 'src/ducks/user-slice';
 import { HomeStackParams } from 'src/navigation/home-stack';
 
 /*
@@ -21,14 +21,14 @@ export const HomeScreen: React.FC<any> = () => {
     const dispatch = useAppDispatch();
 
     // handling button functions
-    const handleLoginButton = async () => {
-        if (user.loggedIn) {
-            await signOutUser();
-            dispatch(signOut());
-        } else {
-            navigation.navigate('Auth');
-        }
-    };
+    // const handleLoginButton = async () => {
+    //     if (user.loggedIn) {
+    //         await signOutUser();
+    //         dispatch(signOut());
+    //     } else {
+    //         navigation.navigate('Auth');
+    //     }
+    // };
 
     return (
         <Box

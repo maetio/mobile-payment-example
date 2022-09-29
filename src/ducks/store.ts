@@ -16,7 +16,6 @@ const persistConfig = {
 const reducers = combineReducers({
     user: userReducer,
     cart: cartReducer,
-    // query tool
     [productsApi.reducerPath]: productsApi.reducer,
     [firebaseAuthApi.reducerPath]: firebaseAuthApi.reducer,
 });
@@ -37,7 +36,7 @@ export const store = configureStore({
             },
         })
             .concat(productsApi.middleware)
-            // .concat(firebaseAuthApi.middleware),
+            .concat(firebaseAuthApi.middleware),
     // add concat here when I finish services/productsApi
 });
 
