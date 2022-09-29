@@ -7,9 +7,11 @@ import { number } from 'yup/lib/locale';
 import { BasicProductData } from 'src/types/products';
 import { useFetchProductsQuery } from 'src/services/products-queries';
 
-export const ProductsScreen = () => {
-    // RTK Query Example/Test
+// new imports
+import { fetchProducts } from 'src/firebase/products-api';
+// end newimports
 
+export const ProductsScreen = () => {
     const [products, setProducts] = useState<BasicProductData[] | undefined>();
     const [lastDocID, setLastDocID] = useState<string | undefined>(undefined);
     const [lastPostStatus, setLastPostStatus] = useState(false);
@@ -29,85 +31,76 @@ export const ProductsScreen = () => {
 
     */
 
-    const {
-        data = [],
-        isFetching,
-        isLoading,
-        isError,
-        error,
-        isSuccess,
-        refetch,
-    } = useFetchProductsQuery(lastDocID);
-
-    // useEffect(() => {
-    //     // getPost();
-    //     // if (data && lastDocSaved) {
-    //     //     console.log(data.lastDoc === lastDocSaved);
-    //     // }
-
-    //     setProducts(data);
-    // }, []);
+    const { data, isFetching, isLoading, isError, error, isSuccess, refetch } =
+        useFetchProductsQuery(lastDocID);
 
     useEffect(() => {
-        if (!lastDocID) {
-            setProducts(data);
-            refetch();
-            console.log('fired from !lastDoc');
-        } else {
-            if (!isFetching && products && data) {
-                console.log('fired');
+        getPost();
+    }, []);
 
-                setProducts([...products, ...data]);
-
-                // console.log('fired from lastDoc');
-            }
-        }
-
-        data.length === 0 ? setLastPostStatus(true) : setLastPostStatus(false);
-
-        console.log(data?.length);
-        console.log(data);
-    }, [data]);
+    // used for RTK
 
     // useEffect(() => {
-    //     // console.log(data);
-    //     // console.log('isFetching');
-    // }, [isFetching]);
+    //     if (!lastDocID) {
+    //         setProducts(data);
+    //         refetch();
+    //         console.log('fired from !lastDoc');
+    //     } else {
+    //         if (!isFetching && products && data) {
+    //             refetch();
+    //             console.log('fired');
 
-    useEffect(() => {
-        if (!lastDocID) {
-            refetch();
-        }
-    }, [lastDocID]);
+    //             setProducts([...products, ...data]);
 
-    // const getPost = async () => {
-    //     const { prod, lastDoc } = await fetchInitialData();
-    //     setProducts(prod);
-    //     setLastDocSaved(lastDoc);
+    //             // console.log('fired from lastDoc');
+    //         }
+    //     }
+
+    //     data?.length === 0 ? setLastPostStatus(true) : setLastPostStatus(false);
+
+    //     console.log(data?.length);
+    //     console.log(data);
+    // }, [data]);
+
+    // End used for RTK
+
+    // useEffect(() => {
+    //     if (!lastDocID) {
+    //         refetch();
+    //     }
+    // }, [lastDocID]);
+
+    const getPost = async () => {
+        // for RTK
+        // const products = await fetchProducts(lastDocID);
+        // setProducts(products);
+        // setLastDocSaved(lastDoc);
+        // End RTK
+
+        const products = await fetchProducts(lastDocID);
+        setProducts(products);
+        console.log(products);
+    };
+
+    // const getMorePosts = async () => {
+    //     console.log(lastPostStatus);
+
+    //     // const lastID = data[data.length - 1].id;
+    //     if (products) {
+    //         const lastID = products[products.length - 1].id;
+    //         setLastDocID(lastID);
+    //     }
     // };
 
-    const getMorePosts = async () => {
-        console.log(lastPostStatus);
-
-        const lastID = data[data.length - 1].id;
-        console.log('getmore');
-        setLastDocID(lastID);
-    };
-
-    const refreshFuntion = () => {
-        setLastPostStatus(false);
-        setLastDocID(undefined);
-        refetch();
-    };
+    // const refreshFuntion = () => {
+    //     setLastPostStatus(false);
+    //     setLastDocID(undefined);
+    //     refetch();
+    // };
 
     // if (isLoading) {
     //     return <ActivityIndicator color="#36d7b7" />;
     // }
-
-    console.log(error);
-    console.log(data);
-    console.log(lastDocID);
-    console.log(lastPostStatus);
 
     return (
         <>
@@ -119,12 +112,12 @@ export const ProductsScreen = () => {
                     data={products}
                     renderItem={({ item }) => <Product productData={item} key={item.id} />}
                     showsVerticalScrollIndicator={false}
-                    onEndReached={!lastPostStatus ? getMorePosts : null}
+                    // onEndReached={!lastPostStatus ? getMorePosts : null}
                     onEndReachedThreshold={0.01}
                     scrollEventThrottle={150}
-                    ListFooterComponent={() => (!lastPostStatus ? <Spinner /> : null)}
-                    refreshing={isFetching}
-                    onRefresh={refreshFuntion}
+                    // ListFooterComponent={() => (!lastPostStatus ? <Spinner /> : null)}
+                    // refreshing={isFetching}
+                    // onRefresh={refreshFuntion}
                 />
             </Box>
             {/* )} */}

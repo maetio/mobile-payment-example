@@ -19,11 +19,15 @@ export const fetchProducts = async (lastDocumentID: string | undefined) => {
         converters.productData,
     );
 
+    console.log('hellllllo');
+
     const lastVisible = lastDocumentID ? await getDoc(doc(colRef, lastDocumentID)) : null;
 
+    // Make sure to change limit back to 3
     const q = lastVisible
         ? query(colRef, orderBy('price'), startAfter(lastVisible), limit(3))
-        : query(colRef, orderBy('price'), limit(3));
+        : query(colRef, orderBy('price'), limit(6));
+    // Make sure to change limit back to 3
     const productData = await getDocs(q);
 
     const prod: BasicProductData[] = [];
@@ -33,6 +37,8 @@ export const fetchProducts = async (lastDocumentID: string | undefined) => {
         prod.push(datas);
     });
 
+    console.log('hello');
+    console.log(prod);
     return prod;
 };
 
