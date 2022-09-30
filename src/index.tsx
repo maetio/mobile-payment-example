@@ -9,6 +9,8 @@ import { persistStore } from 'redux-persist';
 import RootNavigator from 'src/navigation';
 import { store } from 'src/ducks/store';
 import { nativeBaseLightTheme, nativeBaseDarkTheme } from 'src/constants/theme';
+// import {useStripe} from '@stripe/stripe-react-native';
+// import {loadStripe} from '@stripe/stripe-js'
 
 const persistor = persistStore(store);
 

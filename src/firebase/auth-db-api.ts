@@ -18,7 +18,7 @@ export async function getUser(userID: string) {
     /*
         Function will overwrite any users with the same uid
     */
-    const uid = userID.startsWith('maet-') ? userID : `maet-user-${userID}`;
+    const uid = userID.startsWith('maet-') ? userID : userID;
     const userRef = doc(db, 'users', uid).withConverter(converters.users);
     return firestoreGetHandler(getDoc(userRef));
 }

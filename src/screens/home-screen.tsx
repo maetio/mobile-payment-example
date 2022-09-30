@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Box, Button, Text } from 'native-base';
+import { Box, Button, Text, Link } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useAppDispatch, useAppSelector } from 'src/hooks/useful-ducks';
 import { signOutUser } from 'src/firebase/auth-api';
@@ -38,6 +38,7 @@ export const HomeScreen: React.FC<any> = () => {
             flex={1}
             alignItems="center"
             justifyContent="center">
+            <Link href="https://nativebase.io">Click here to open documentation.</Link>
             {/* <Box py={3}>
                 <Text color="plainText.800" bold>
                     Really fun user data counter: {user.count}

@@ -16,12 +16,10 @@ import { initializeUser, User } from 'src/types/user';
 import { getUser, updateUser } from 'src/firebase/auth-db-api';
 import { emptyFirebaseApi } from './emptyFirebaseApi';
 
-
 // import { emailSignIn } from 'src/ducks/user-slice';
 // import { useAppDispatch } from 'src/hooks/useful-ducks';
 
 // const dispatch = useAppDispatch();
-
 
 /*
     Check documentation resources for additional questions
@@ -81,7 +79,7 @@ export const firebaseAuthApi = emptyFirebaseApi.injectEndpoints({
                             accountInfo.password,
                         );
                         const newUser = initializeUser({
-                            uid: `maet-user-${user.uid}`,
+                            uid: user.uid,
                             email: user.email,
                             firstName: accountInfo.firstName,
                             lastName: accountInfo.lastName,
@@ -112,7 +110,7 @@ export const firebaseAuthApi = emptyFirebaseApi.injectEndpoints({
                 try {
                     // sign in new user and get data from database
                     const { user } = await signInWithEmail(email, password);
-                    console.log(user)
+                    console.log(user);
                     const newUser = await getUser(user.uid);
                     // dispatch(emailSignIn(newUser));
                     console.log('signed in');
