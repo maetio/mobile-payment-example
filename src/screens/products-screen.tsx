@@ -11,6 +11,8 @@ import { useFetchProductsQuery } from 'src/services/products-queries';
 import { fetchProducts } from 'src/firebase/products-api';
 // end newimports
 
+// All commented out code is for RTK query, however for testing, I used this.
+
 export const ProductsScreen = () => {
     const [products, setProducts] = useState<BasicProductData[] | undefined>();
     const [lastDocID, setLastDocID] = useState<string | undefined>(undefined);
@@ -31,8 +33,8 @@ export const ProductsScreen = () => {
 
     */
 
-    const { data, isFetching, isLoading, isError, error, isSuccess, refetch } =
-        useFetchProductsQuery(lastDocID);
+    // const { data, isFetching, isLoading, isError, error, isSuccess, refetch } =
+    //     useFetchProductsQuery(lastDocID);
 
     useEffect(() => {
         getPost();

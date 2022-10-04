@@ -5,21 +5,13 @@ import { CartItem } from 'src/cards/cart-item';
 import { useAppSelector } from 'src/hooks/useful-ducks';
 import { db } from 'src/firebase/firebase-config';
 import { loadStripe } from '@stripe/stripe-js';
-import {
-    collection,
-    getDocs,
-    doc,
-    getDoc,
-    query,
-    limit,
-    orderBy,
-    startAfter,
-    QueryDocumentSnapshot,
-    DocumentData,
-    setDoc,
-    addDoc,
-    onSnapshot,
-} from 'firebase/firestore';
+import { collection, addDoc, onSnapshot, DocumentData, DocumentSnapshot } from 'firebase/firestore';
+import { string } from 'yup';
+
+interface Data {
+    error: any;
+    url: string;
+}
 
 export const CartScreen = () => {
     const [loading, setLoading] = useState(false);
@@ -51,15 +43,7 @@ export const CartScreen = () => {
             }
 
             if (url) {
-                // const supported = await Linking.canOpenURL(url);
-
                 await Linking.openURL(url);
-
-                // if (supported) {
-                //     // Opening the link with some app, if the URL scheme is "http" the web link should be opened
-                //     // by some browser in the mobile
-                //     await Linking.openURL(url);
-                // }
             }
         });
     };

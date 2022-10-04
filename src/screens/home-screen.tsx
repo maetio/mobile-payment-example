@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Box, Button, Text, Link } from 'native-base';
+import { Box, Button, Text, Link, FlatList } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useAppDispatch, useAppSelector } from 'src/hooks/useful-ducks';
 import { signOutUser } from 'src/firebase/auth-api';
 import { signOut } from 'src/ducks/user-slice';
 import { HomeStackParams } from 'src/navigation/home-stack';
+
+import { query, where, getDocs, collection, getDoc } from 'firebase/firestore';
+import { db } from 'src/firebase/firebase-config';
 
 /*
     Define Screen Typee
@@ -13,22 +16,52 @@ import { HomeStackParams } from 'src/navigation/home-stack';
 type HomeScreenProps = StackNavigationProp<HomeStackParams, 'Home'>;
 
 export const HomeScreen: React.FC<any> = () => {
-    // navigation
-    const navigation = useNavigation<HomeScreenProps>();
+    const [prods, setprods] = useState<any[]>();
 
-    // redux handlers
-    const user = useAppSelector((state) => state.user);
-    const dispatch = useAppDispatch();
+    useEffect(() => {
+        getPost();
+    }, []);
 
-    // handling button functions
-    // const handleLoginButton = async () => {
-    //     if (user.loggedIn) {
-    //         await signOutUser();
-    //         dispatch(signOut());
-    //     } else {
-    //         navigation.navigate('Auth');
-    //     }
-    // };
+    useEffect(() => {
+        console.log(prods);
+    }, [prods]);
+
+
+    // Basic function that gets stripe product data from Firestore
+
+    const fetchProducts = async () => {
+        const productsRef = collection(db, 'products');
+        const productsQuery = query(productsRef, where('active', '==', true));
+        const productsQuerySnap = await getDocs(productsQuery);
+        let products: any = [];
+        productsQuerySnap.forEach(async (doc) => {
+            const pricesRef = collection(db, 'products', doc.id, 'prices');
+            const q = query(pricesRef);
+            const pricesQuerySnap = await getDocs(q);
+
+            const productsObject = {
+                item: {
+                    id: doc.id,
+                    ...doc.data(),
+                },
+                prices: pricesQuerySnap.docs.map((price) => {
+                    return {
+                        id: price.id,
+                        ...price.data(),
+                    };
+                }),
+            };
+            products.push(productsObject);
+        });
+
+        return products;
+    };
+
+    const getPost = async () => {
+        const prods = await fetchProducts();
+        setprods(prods);
+    };
+
 
     return (
         <Box
@@ -38,18 +71,20 @@ export const HomeScreen: React.FC<any> = () => {
             flex={1}
             alignItems="center"
             justifyContent="center">
-            <Link href="https://nativebase.io">Click here to open documentation.</Link>
-            {/* <Box py={3}>
-                <Text color="plainText.800" bold>
-                    Really fun user data counter: {user.count}
-                </Text>
-                <Button m={2} onPress={() => dispatch(incrementCount())}>
-                    Increment Count
-                </Button>
-                <Button m={2} onPress={() => dispatch(decrementCount())}>
-                    Decrement Count
-                </Button>
-            </Box> */}
+           
+            <Box w="100%" bg="primary.500" flex={1} justifyContent="space-around">
+                <FlatList
+                    data={prods}
+                    renderItem={({ item }) => <Text>{item.item.name}</Text>}
+                    showsVerticalScrollIndicator={false}
+                    // onEndReached={!lastPostStatus ? getMorePosts : null}
+                    onEndReachedThreshold={0.01}
+                    scrollEventThrottle={150}
+                    // ListFooterComponent={() => (!lastPostStatus ? <Spinner /> : null)}
+                    // refreshing={isFetching}
+                    // onRefresh={refreshFuntion}
+                />
+            </Box>
         </Box>
     );
 };

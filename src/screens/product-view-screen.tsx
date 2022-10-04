@@ -26,8 +26,6 @@ export const ProductViewScreen: React.FC<routeID> = ({ route }) => {
     const { id } = route.params;
     const { data, isLoading, isError, error, refetch } = useFetchDetailedProductQuery(id);
 
-    // const docRef = doc(db, 'detailed-product-data', id);
-
     const dispatch = useAppDispatch();
 
     useEffect(() => {

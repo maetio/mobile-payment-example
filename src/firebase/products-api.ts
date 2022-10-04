@@ -9,6 +9,7 @@ import {
     startAfter,
     QueryDocumentSnapshot,
     DocumentData,
+    where,
 } from 'firebase/firestore';
 import { db } from 'src/firebase/firebase-config';
 import { BasicProductData, DetailedProductData } from 'src/types/products';
@@ -41,6 +42,8 @@ export const fetchProducts = async (lastDocumentID: string | undefined) => {
     console.log(prod);
     return prod;
 };
+
+
 
 export const fetchDetailedData = async (id: string) => {
     const docRef = doc(db, 'detailed-product-data', id).withConverter(
