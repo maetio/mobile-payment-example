@@ -45,6 +45,21 @@ A [**React Native**](https://reactnative.dev/), [**TypeScript**](https://www.typ
 * **Dark and Light Theme:** We configured our own [theme](https://github.com/maetio/template/blob/main/src/constants/theme.ts) to extent to themes for [NativeBase](https://docs.nativebase.io/customizing-theme) and [React Navigation](https://reactnavigation.org/docs/themes).
 * **Form Validation:** We are using [react-hook-form](https://react-hook-form.com/) and [yup](https://www.npmjs.com/package/yup) to validate our user inputs, checking them in our form-input component while passing the yup schema in the screens. [This tutorial](https://dev.to/franciscomendes10866/react-form-validation-with-react-hook-form-and-yup-4a98) is useful to reference. 
 
+## :newspaper: Resources
+Engineering can be tricky, so we compiled a list of great resources and videos that we believe will make setting up this project much easier.
+
+### :video_camera: Videos:
+
+* How do I [Paginate](https://www.youtube.com/watch?v=poqTHxtDXwU&t=2s) From FireStore. A great Video for getting an overview of what pagination is and how to impament it with FireStore.
+* [RTK Query](https://www.youtube.com/watch?v=HyZzCHgG3AY&t=160s) Crud overview. Although we used a query functions(queryfn), this is a great starting point for implamenting RTK query.
+* Implamenting Stripe payment with Firebase, [video 1](https://www.youtube.com/watch?v=5rc0pe2qRjg&t=1119s), [video 2](https://www.youtube.com/watch?v=VnntkusKinM&t=661s). There are not too many extensive videos on this topic, however with both of these and the offical stripe documentation, you should be ready to get payments in your app!
+
+
+### :gear: Documentation and articles:
+* Offical Pagination with FireStore [Docs](https://firebase.google.com/docs/firestore/query-data/query-cursors). Highly recommend the FireStore docs, for everything FireStore related.
+* RTK Query custom functions [Docs](https://redux-toolkit.js.org/rtk-query/usage/customizing-queries) since we are not using endpoints like a traditional API, we recommend learning about the queryFn tool that we used to connect RTK to FireStore.
+* Unfortunately you can not look at the stripe FireBase extension docs without downloading it to your own FireBase project. We have instrutions on how to set this up further up in this readme. In the meantime, you can look at the offical Stripe Docs [here](https://stripe.com/docs/checkout/quickstart), and get the stripe exteion downloaded [here](https://firebase.google.com/products/extensions/stripe-firestore-stripe-payments).
+
 ## 🔧 Usage
 > Be sure to have the [Expo CLI](https://docs.expo.io/workflow/expo-cli/) installed.
 
