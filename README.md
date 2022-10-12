@@ -14,6 +14,11 @@ Maet is a sports-technology startup that is ***Redefining the Athletic Community
 
 Drop us a ⭐ if you find this template helpful! Additionally, if you want to stay up-to-date about Maet, visit our website at [Maet.io](https://www.maet.io/), or follow our [Instagram](https://instagram.com/playmaet) and [LinkedIn](https://www.linkedin.com/company/maetio). 
 
+## About this Project
+This project has a clear focus on learning our stack(you can learn what technologies we used further down the readme) as well as implamenting the Stripe payment extension from FireBase. With this project you will be able to display your own business's products or subscriptions directly from the Stripe dashboard. Products are displayed in an infinite scroll pagination list, allowing new data to be fetched everytime someone reaches the bottom of the page. Users can pick and choose items, and also refresh the page for any updated information. It also make new stripe users as soon as someone logins into the app for the first time. All this is wrapped together neat package that allows anyone to copy and paste this into their own app with a little setup.
+
+## Set Up:
+
 ## ⚖️ Development Philosophy
 As an engineer at Maet, **we strive to create elegant features for our fellow developers and our users**. We have created the following values that help us in our purpose to build valuable developer tools and delightful user experiences.
 
