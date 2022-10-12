@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Box, Button, Text, Link, FlatList } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -10,51 +11,39 @@ import { HomeStackParams } from 'src/navigation/home-stack';
 
 import { query, where, getDocs, collection, getDoc } from 'firebase/firestore';
 import { db } from 'src/firebase/firebase-config';
+import { useFetchStripeProductsQuery } from 'src/services/products-queries';
 
 /*
     Define Screen Typee
     
 */
 
-const fetchProducts = async () => {
-
-    const productsRef = collection(db, 'products');
-    const productsQuery = query(productsRef, where('active', '==', true));
-    const productsQuerySnap = await getDocs(productsQuery);
-
-    const products: any = [];
-
-    productsQuerySnap.forEach(async (doc) => {
-        const pricesRef = collection(db, 'products', doc.id, 'prices');
-        const q = query(pricesRef);
-        const pricesQuerySnap = await getDocs(q);
-
-        const datas = {
-            item: { id: doc.id, ...doc.data() },
-
-            prices: pricesQuerySnap.docs.map(async (price) => {
-                return { id: price.id, ...price.data() };
-            }),
-        };
-       
-        products.push(datas);
-    });
-
-    return products;
-};
-
 export const HomeScreen: React.FC<any> = () => {
+    const timeStampRef = useRef(String(Date.now())).current;
+
     const [products, setprods] = useState<any[]>();
     const firstLoad = useRef(true);
 
-    useEffect(() => {
-        if (firstLoad.current) {
-            firstLoad.current = false;
+    const { data, isFetching, isLoading, isError, error, isSuccess, refetch } =
+        useFetchStripeProductsQuery(timeStampRef);
 
-            getPost();
-            console.log(products);
-        }
+    useEffect(() => {
+        // if (firstLoad.current) {
+        //     firstLoad.current = false;
+
+        //     // getPost();
+        //     console.log(products);
+
+        setprods(data);
+        //     console.log(data);
+        // }
+        console.log(data);
     }, []);
+
+    useEffect(() => {
+        setprods(data);
+        console.log(error);
+    }, [data]);
 
     useEffect(() => {
         console.log(products);
@@ -62,12 +51,18 @@ export const HomeScreen: React.FC<any> = () => {
 
     // Basic function that gets stripe product data from Firestore
 
-    const getPost = async () => {
-        console.log('first load');
-        const prods = await fetchProducts();
+    // const getPost = async () => {
+    //     console.log('first load');
+    //     const prods = await fetchProducts();
 
-        setprods(prods);
-    };
+    //     setprods(prods);
+    // };
+
+    if (isLoading || isError) {
+        console.log(error);
+
+        return <ActivityIndicator color="#36d7b7" />;
+    }
 
     return (
         <Box
@@ -77,11 +72,11 @@ export const HomeScreen: React.FC<any> = () => {
             flex={1}
             alignItems="center"
             justifyContent="center">
-            {products !== undefined ? (
+            {isSuccess && data && (
                 <Box w="100%" bg="primary.500" flex={1} justifyContent="space-around">
                     <FlatList
                         data={products}
-                        renderItem={({ item }) => <Text>{item.item.name}</Text>}
+                        renderItem={({ item }) => <Text>{item.name}</Text>}
                         showsVerticalScrollIndicator={false}
                         // onEndReached={!lastPostStatus ? getMorePosts : null}
                         onEndReachedThreshold={0.01}
@@ -91,8 +86,6 @@ export const HomeScreen: React.FC<any> = () => {
                         // onRefresh={refreshFuntion}
                     />
                 </Box>
-            ) : (
-                <Text>something went wrong</Text>
             )}
         </Box>
     );

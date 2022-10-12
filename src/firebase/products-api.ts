@@ -43,8 +43,6 @@ export const fetchProducts = async (lastDocumentID: string | undefined) => {
     return prod;
 };
 
-
-
 export const fetchDetailedData = async (id: string) => {
     const docRef = doc(db, 'detailed-product-data', id).withConverter(
         converters.detailedProductData,
@@ -53,4 +51,56 @@ export const fetchDetailedData = async (id: string) => {
     const detailedProductData = { ...docSnap.data(), id };
 
     return detailedProductData;
+};
+
+export const fetchStripeProducts = async () => {
+    const productsRef = collection(db, 'products');
+    const productsQuery = query(productsRef, where('active', '==', true));
+    const productsQuerySnap = await getDocs(productsQuery);
+
+    const products: any = [];
+
+    productsQuerySnap.docs.forEach(async (doc) => {
+        // const pricesRef = collection(db, 'products', doc.id, 'prices');
+        // const q = query(pricesRef);
+        // const pricesQuerySnap = await getDocs(q);
+
+        const pricesRef = collection(db, 'products', doc.id, 'prices');
+        const pricesQuerySnap = await getDocs(pricesRef);
+
+        try {
+            let thing;
+
+            pricesQuerySnap.forEach((price) => {
+                thing = {
+                    id: price.id,
+                    ...price.data(),
+                };
+            });
+
+            const datas = {
+                id: doc.id,
+                ...doc.data(),
+
+                prices: thing,
+            };
+
+            products.push(datas);
+        } catch (err) {
+            console.log(err);
+        }
+
+        // products.push({
+        //     id: doc.id,
+        //     ...doc.data(),
+        //     prices: pricesQuerySnap.docs.map((price) => {
+        //         return {
+        //             id: price.id,
+        //             ...price.data(),
+        //         };
+        //     }),
+        // });
+    });
+
+    return products;
 };

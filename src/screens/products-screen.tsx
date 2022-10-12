@@ -6,6 +6,7 @@ import { string } from 'yup';
 import { number } from 'yup/lib/locale';
 import { BasicProductData } from 'src/types/products';
 import { useFetchProductsQuery } from 'src/services/products-queries';
+import { LastDoc } from 'src/types/last-document';
 
 // new imports
 import { fetchProducts } from 'src/firebase/products-api';
@@ -18,7 +19,7 @@ export const ProductsScreen = () => {
     const [lastPostStatus, setLastPostStatus] = useState(false);
 
     const timeStampRef = useRef(String(Date.now())).current;
-    const [lastDocID, setLastDocID] = useState<any>({
+    const [lastDocID, setLastDocID] = useState<LastDoc>({
         prod: undefined,
         time: timeStampRef,
     });
@@ -111,7 +112,7 @@ export const ProductsScreen = () => {
             prod: undefined,
             time: timeStampRef,
         });
-        refetch();
+        // refetch();
     };
 
     if (isLoading) {

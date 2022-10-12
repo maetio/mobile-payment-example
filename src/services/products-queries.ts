@@ -1,18 +1,14 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BasicProductData, DetailedProductData } from 'src/types/products';
-import { fetchDetailedData, fetchProducts } from 'src/firebase/products-api';
-
-interface thisData {
-    prod: string | undefined;
-    time: string;
-}
+import { fetchDetailedData, fetchProducts, fetchStripeProducts } from 'src/firebase/products-api';
+import { LastDoc } from 'src/types/last-document';
 
 export const productsApi = createApi({
     reducerPath: 'productsApi',
     baseQuery: fakeBaseQuery(),
     tagTypes: ['Product'],
     endpoints: (builder) => ({
-        fetchProducts: builder.query<BasicProductData[], thisData | undefined>({
+        fetchProducts: builder.query<BasicProductData[], LastDoc | undefined>({
             async queryFn(lastDocID, timeStamp) {
                 // console.log(lastDocID);
                 console.log('from query');
@@ -41,7 +37,24 @@ export const productsApi = createApi({
             },
             // providesTags: ['Product'],
         }),
+        fetchStripeProducts: builder.query<BasicProductData[], string>({
+            async queryFn() {
+                // console.log(lastDocID);
+                console.log('from query');
+
+                try {
+                    const prod = await fetchStripeProducts();
+                    console.log(prod);
+
+                    return { data: prod };
+                } catch (err) {
+                    return { error: err };
+                }
+            },
+            providesTags: ['Product'],
+        }),
     }),
 });
 
-export const { useFetchProductsQuery, useFetchDetailedProductQuery } = productsApi;
+export const { useFetchProductsQuery, useFetchDetailedProductQuery, useFetchStripeProductsQuery } =
+    productsApi;
