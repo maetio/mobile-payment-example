@@ -20,7 +20,7 @@ export const fetchProducts = async (lastDocumentID: string | undefined) => {
         converters.productData,
     );
 
-    console.log('hellllllo');
+    // console.log('hellllllo');
 
     const lastVisible = lastDocumentID ? await getDoc(doc(colRef, lastDocumentID)) : null;
 

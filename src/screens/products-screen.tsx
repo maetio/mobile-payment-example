@@ -65,7 +65,7 @@ export const ProductsScreen = () => {
             }
         }
 
-        data?.length === 0 ? setLastPostStatus(true) : null;
+        data?.length === 0 ? setLastPostStatus(true) : setLastPostStatus(false);
 
         console.log(data?.length);
         // console.log(data);
@@ -73,11 +73,11 @@ export const ProductsScreen = () => {
 
     // End used for RTK
 
-    useEffect(() => {
-        if (lastDocID) {
-            refetch();
-        }
-    }, [lastDocID]);
+    // useEffect(() => {
+    //     if (lastDocID) {
+    //         refetch();
+    //     }
+    // }, [lastDocID]);
 
     // Get post for no RTK
 
@@ -100,16 +100,19 @@ export const ProductsScreen = () => {
 
         // const lastID = data[data.length - 1].id;
         if (products) {
-            const lastID = { prod: products[products.length - 1].id, time: timeStampRef };
+            const lastID = { prod: products[products.length - 1].id };
             setLastDocID(lastID);
         }
     };
 
-    // const refreshFuntion = () => {
-    //     setLastPostStatus(false);
-    //     setLastDocID(undefined);
-    //     refetch();
-    // };
+    const refreshFuntion = () => {
+        setLastPostStatus(false);
+        setLastDocID({
+            prod: undefined,
+            time: timeStampRef,
+        });
+        refetch();
+    };
 
     if (isLoading) {
         return <ActivityIndicator color="#36d7b7" />;
@@ -129,8 +132,8 @@ export const ProductsScreen = () => {
                         onEndReachedThreshold={0.01}
                         scrollEventThrottle={150}
                         ListFooterComponent={() => (!lastPostStatus ? <Spinner /> : null)}
-                        // refreshing={isFetching}
-                        // onRefresh={refreshFuntion}
+                        refreshing={isFetching}
+                        onRefresh={refreshFuntion}
                     />
                 </Box>
             )}
