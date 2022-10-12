@@ -1,32 +1,25 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { db } from 'src/firebase/firebase-config';
-import {
-    collection,
-    getDocs,
-    doc,
-    getDoc,
-    query,
-    limit,
-    orderBy,
-    startAfter,
-    QueryDocumentSnapshot,
-    DocumentData,
-} from 'firebase/firestore';
 import { BasicProductData, DetailedProductData } from 'src/types/products';
 import { fetchDetailedData, fetchProducts } from 'src/firebase/products-api';
+
+interface thisData {
+    prod: string | undefined;
+    time: string;
+}
 
 export const productsApi = createApi({
     reducerPath: 'productsApi',
     baseQuery: fakeBaseQuery(),
     tagTypes: ['Product'],
     endpoints: (builder) => ({
-        fetchProducts: builder.query<BasicProductData[], string | undefined>({
-            async queryFn(lastDocID) {
-                console.log(lastDocID);
+        fetchProducts: builder.query<BasicProductData[], thisData | undefined>({
+            async queryFn(lastDocID, timeStamp) {
+                // console.log(lastDocID);
                 console.log('from query');
 
                 try {
-                    const prod = await fetchProducts(lastDocID);
+                    const prod = await fetchProducts(lastDocID?.prod);
+                    console.log(prod);
 
                     return { data: prod };
                 } catch (err) {

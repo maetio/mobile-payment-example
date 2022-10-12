@@ -27,7 +27,7 @@ export const fetchProducts = async (lastDocumentID: string | undefined) => {
     // Make sure to change limit back to 3
     const q = lastVisible
         ? query(colRef, orderBy('price'), startAfter(lastVisible), limit(3))
-        : query(colRef, orderBy('price'), limit(6));
+        : query(colRef, orderBy('price'), limit(3));
     // Make sure to change limit back to 3
     const productData = await getDocs(q);
 
@@ -38,8 +38,8 @@ export const fetchProducts = async (lastDocumentID: string | undefined) => {
         prod.push(datas);
     });
 
-    console.log('hello');
-    console.log(prod);
+    // console.log('hello');
+    // console.log(prod);
     return prod;
 };
 
