@@ -8,14 +8,16 @@ export interface BasicProductData {
 type ImageMap = { [imageName: string]: string };
 
 export interface DetailedProductData {
-    img: ImageMap;
-    name: string;
-    price: number;
-    amenities: {
-        tv: boolean;
-        ac: boolean;
-    };
-    desc: string;
     id: string;
-    qty?: number;
+    img?: ImageMap | undefined;
+    name?: string | undefined;
+    price?: number | undefined;
+    amenities?:
+        | {
+              tv: boolean;
+              ac: boolean;
+          }
+        | undefined;
+    desc?: string | undefined;
+    qty?: number | undefined;
 }

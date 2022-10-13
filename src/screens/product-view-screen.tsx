@@ -24,23 +24,13 @@ export const ProductViewScreen: React.FC<routeID> = ({ route }) => {
 
     const [quantity, setQuantity] = useState('1');
     const { id } = route.params;
-    const { data, isLoading, isError, error } = useFetchDetailedProductQuery(id);
-
-    // const docRef = doc(db, 'detailed-product-data', id);
+    const { data, isLoading, isError, error, refetch } = useFetchDetailedProductQuery(id);
 
     const dispatch = useAppDispatch();
 
-    // useEffect(() => {
-    //     const getProducts = async () => {
-    //         const docSnap = await getDoc(docRef);
-    //         // const thing = { ...docSnap.data(), id } as Partial<DetailedProductData>;
-    //         const thing = { ...docSnap.data(), id } as DetailedProductData;
-
-    //         setDetailedData(thing);
-    //     };
-
-    //     getProducts();
-    // }, []);
+    useEffect(() => {
+        refetch();
+    });
 
     const cart = useAppSelector((state) => state.cart);
 

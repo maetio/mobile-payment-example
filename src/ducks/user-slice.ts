@@ -9,23 +9,6 @@ const initialUser: User = {
     isAnonymous: false,
     emailVerified: false,
     loggedIn: false,
-    count: 0,
-    cart: [
-        {
-            id: 1,
-            name: 'house1',
-            qty: 1,
-            price: 1000,
-            img: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=600',
-        },
-        {
-            id: 2,
-            name: 'house2',
-            qty: 1,
-            price: 2000,
-            img: 'https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=600',
-        },
-    ],
 };
 
 export const userSlice = createSlice({
@@ -56,15 +39,8 @@ export const userSlice = createSlice({
             state.email = action.payload;
             state.loggedIn = true;
         },
-        incrementCount: (state) => {
-            state.count += 1;
-        },
-        decrementCount: (state) => {
-            state.count -= 1;
-        },
     },
 });
 
-export const { emailSignIn, guestSignIn, signOut, updateEmail, incrementCount, decrementCount } =
-    userSlice.actions;
+export const { emailSignIn, guestSignIn, signOut, updateEmail } = userSlice.actions;
 export default userSlice.reducer;

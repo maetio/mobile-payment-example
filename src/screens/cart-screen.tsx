@@ -1,10 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Linking } from 'react-native';
 import { Box, Button, ScrollView, Flex, Text } from 'native-base';
 import { CartItem } from 'src/cards/cart-item';
 import { useAppSelector } from 'src/hooks/useful-ducks';
+import { db } from 'src/firebase/firebase-config';
+import { loadStripe } from '@stripe/stripe-js';
+import { collection, addDoc, onSnapshot, DocumentData, DocumentSnapshot } from 'firebase/firestore';
+import { string } from 'yup';
+
+interface Data {
+    error: any;
+    url: string;
+}
 
 export const CartScreen = () => {
+    const [loading, setLoading] = useState(false);
+
     const cart = useAppSelector((state) => state.cart);
+    const user = useAppSelector((state) => state.user);
+
+    const checkOut = async () => {
+        // Linking.openURL('https://developer.mozilla.org/en-US/');
+
+        console.log(user.uid);
+        setLoading(true);
+
+        const userCollection = collection(db, 'users', user.uid, 'checkout_sessions');
+
+        const docRef = await addDoc(userCollection, {
+            mode: 'payment',
+            price: 'price_1Ln1KBKL7t73XQEMlFlVbFWZ', // One-time price created in Stripe
+            success_url: 'https://developer.mozilla.org/en-US/',
+            cancel_url: 'https://developer.mozilla.org/en-US/',
+        });
+
+        onSnapshot(docRef, async (snap: any) => {
+            const { error, url } = snap.data();
+
+            if (error) {
+                console.log(`there is an error ${error.message}`);
+                setLoading(false);
+            }
+
+            if (url) {
+                await Linking.openURL(url);
+            }
+        });
+    };
 
     return (
         <>
@@ -17,7 +59,9 @@ export const CartScreen = () => {
                                     return <CartItem key={el.id} cartData={el} />;
                                 })}
                             </Box>
-                            <Button mt="10">CheckOut</Button>
+                            <Button disabled={loading} onPress={checkOut} mt="10">
+                                {loading ? 'loading...' : 'CheckOut'}
+                            </Button>
                         </>
                     </Flex>
                 </ScrollView>
