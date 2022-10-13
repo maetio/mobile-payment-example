@@ -33,9 +33,14 @@ This project has a clear focus on learning our stack(you can learn what technolo
 7. Paginating the products from FireStore:
 * Highly recomend looking at the offical pagination [Docs](https://firebase.google.com/docs/firestore/query-data/query-cursorsv) at FireStore. As well as looking at our code to get familair with pagination using RTK query.
 *In short, we need to make a hook with RTK query that takes in the the last id of all the items cuurently being displayed, and returns the next items from firebase. We also need to make sure we have an initial base case since we will not have data in the begining. 
-*Once we get this data we populate a flatlist and add the refresh funtionality to it, by reseting all of the initial parameters to the RTK hook.
-8. adding cart functionality:
+* Once we get this data we populate a flatlist and add the refresh funtionality to it, by reseting all of the initial parameters to the RTK hook.
+8. adding cart functionality: 
+* In a new file create a slice, and add all funcallity you want in your cart, add, delete, adjust, etc.
+* Add a cart slice to your redux tool-kit reducer
+* You can now import this funality any components and just add your products into this global state.
 9. Finalizing the cart with stripe:
+* Now that you have the specified products saved into your cart state you need to take their price IDs and add a document to your users collections. The firebase stripe extension has some really good docs on doing this so please check that out.
+* Once you have all this working test it out by adding a product and checking it out. This should take you to stripes prebuild checkout component.
 
 ## ⚖️ Development Philosophy
 As an engineer at Maet, **we strive to create elegant features for our fellow developers and our users**. We have created the following values that help us in our purpose to build valuable developer tools and delightful user experiences.
