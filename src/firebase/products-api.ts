@@ -7,14 +7,17 @@ import {
     limit,
     orderBy,
     startAfter,
-    QueryDocumentSnapshot,
-    DocumentData,
     where,
     collectionGroup,
 } from 'firebase/firestore';
 import { db } from 'src/firebase/firebase-config';
 import { BasicProductData, DetailedProductData } from 'src/types/products';
 import { converters } from './db-converters';
+import {
+    StripeProducts,
+    StripeProductDetailed,
+    StripeProductBasic,
+} from 'src/types/stripe-products';
 
 export const fetchProducts = async (lastDocumentID: string | undefined) => {
     const colRef = collection(db, 'basic-product-data').withConverter<BasicProductData>(
@@ -39,8 +42,6 @@ export const fetchProducts = async (lastDocumentID: string | undefined) => {
         prod.push(datas);
     });
 
-    // console.log('hello');
-    // console.log(prod);
     return prod;
 };
 
@@ -55,8 +56,11 @@ export const fetchDetailedData = async (id: string) => {
 };
 
 export const fetchStripeProducts = async () => {
-    // const productsRef = doc(db, 'products', 'prod_MW3R41nnioaoQO');
-    const pricesCollecitonRef = collectionGroup(db, 'prices');
+    const pricesCollecitonRef = collectionGroup(db, 'prices').withConverter<StripeProductDetailed>(
+        converters.stripeProductsDetailed,
+    );
+
+    // const pricesCollecitonRef = collectionGroup(db, 'prices');
     const productsQuery = query(pricesCollecitonRef, where('active', '==', true));
     const productsQuerySnap = await getDocs(productsQuery);
 
@@ -64,61 +68,27 @@ export const fetchStripeProducts = async () => {
 
     /// snapshot that contains all of the prices, that are active
 
-    const products: any = [];
+    const products: StripeProducts[] = [];
 
-   
+    await Promise.all(
+        productsQuerySnap.docs.map(async (document) => {
+            const priceData = document.data();
+            const productsRef = doc(
+                db,
+                'products',
+                priceData.product,
+            ).withConverter<StripeProductBasic>(converters.stripeProductsBasic);
+            const basicProductRef = await getDoc(productsRef);
+            const basicProductInfo = basicProductRef.data();
+            const data = {
+                priceID: document.id,
+                ...document.data(),
+                ...basicProductInfo,
+            };
 
-    await Promise.all(productsQuerySnap.docs.map(async (document:any) => {
-        // console.log(document.id, ' => ', document.data());r
-        const priceData = document.data();
-        // console.log(priceData.product);
-        const productsRef = doc(db, 'products', priceData.product);
-        const basicProductRef = await getDoc(productsRef);
-        const basicProductInfo = basicProductRef.data();
-        // console.log(basicProductInfo);
-        const data = {
-            priceID: document.id,
-            price: document.data(),
-            ...basicProductInfo,
-        };
-
-        // console.log(data)
-
-        products.push(data);
-    }))
-
-    // console.log(thing.data())
-
-    // productsQuerySnap.docs.forEach(async (doc) => {
-    //     // const pricesRef = collection(db, 'products', doc.id, 'prices');
-    //     // const q = query(pricesRef);
-    //     // const pricesQuerySnap = await getDocs(q);
-
-    //     const pricesRef = collection(db, 'products', doc.id, 'prices');
-    //     const pricesQuerySnap = await getDocs(pricesRef);
-
-    //     try {
-    //         let thing;
-
-    //         pricesQuerySnap.forEach((price) => {
-    //             thing = {
-    //                 id: price.id,
-    //                 ...price.data(),
-    //             };
-    //         });
-
-    //         const datas = {
-    //             id: doc.id,
-    //             ...doc.data(),
-
-    //             prices: thing,
-    //         };
-
-    //         products.push(datas);
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // });
+            products.push(data);
+        }),
+    );
 
     return products;
 };

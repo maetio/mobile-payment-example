@@ -1,6 +1,10 @@
 import { FirestoreDataConverter, QueryDocumentSnapshot, SnapshotOptions } from 'firebase/firestore';
 import { BasicProductData, DetailedProductData } from 'src/types/products';
-import { StripeProducts } from 'src/types/stripe-products';
+import {
+    StripeProducts,
+    StripeProductBasic,
+    StripeProductDetailed,
+} from 'src/types/stripe-products';
 
 export const converters: { [t: string]: FirestoreDataConverter<any> } = {
     productData: {
@@ -34,21 +38,32 @@ export const converters: { [t: string]: FirestoreDataConverter<any> } = {
             return detailedProductData;
         },
     },
-    stripeProducts: {
-        toFirestore: (stripeProducts: StripeProducts) => {
-            return stripeProducts;
+    stripeProductsDetailed: {
+        toFirestore: (stripeProductsDetailed: StripeProductDetailed) => {
+            return stripeProductsDetailed;
         },
         fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions) => {
             const data = snapshot.data(options);
-            const detailedProductData: StripeProducts = {
-                amenities: data.amenities || null,
-                desc: data.desc || null,
-                img: data.img || null,
-                name: data.name || null,
-                price: data.price || null,
-                id: data.id || null,
+            const stripeProductsDetailed: StripeProductDetailed = {
+                unit_amount: data.unit_amount || null,
+                currency: data.currency || null,
+                product: data.product || null,
             };
-            return detailedProductData;
+            return stripeProductsDetailed;
+        },
+    },
+    stripeProductsBasic: {
+        toFirestore: (stripeProductsBasic: StripeProductBasic) => {
+            return stripeProductsBasic;
+        },
+        fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions) => {
+            const data = snapshot.data(options);
+            const stripeProductsBasic: StripeProductBasic = {
+                description: data.description || null,
+                images: data.images || null,
+                name: data.name || null,
+            };
+            return stripeProductsBasic;
         },
     },
 };
