@@ -46,7 +46,7 @@ export const fetchProducts = async (lastDocumentID: string | undefined) => {
 };
 
 export const fetchDetailedData = async (id: string) => {
-    const docRef = doc(db, 'detailed-product-data', id).withConverter(
+    const docRef = doc(db, 'detailed-product-data', id).withConverter<DetailedProductData>(
         converters.detailedProductData,
     );
     const docSnap = await getDoc(docRef);
