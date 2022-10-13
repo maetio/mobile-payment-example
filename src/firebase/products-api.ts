@@ -10,6 +10,7 @@ import {
     QueryDocumentSnapshot,
     DocumentData,
     where,
+    collectionGroup,
 } from 'firebase/firestore';
 import { db } from 'src/firebase/firebase-config';
 import { BasicProductData, DetailedProductData } from 'src/types/products';
@@ -54,53 +55,70 @@ export const fetchDetailedData = async (id: string) => {
 };
 
 export const fetchStripeProducts = async () => {
-    const productsRef = collection(db, 'products');
-    const productsQuery = query(productsRef, where('active', '==', true));
+    // const productsRef = doc(db, 'products', 'prod_MW3R41nnioaoQO');
+    const pricesCollecitonRef = collectionGroup(db, 'prices');
+    const productsQuery = query(pricesCollecitonRef, where('active', '==', true));
     const productsQuerySnap = await getDocs(productsQuery);
+
+    // const thing = await getDoc(productsRef);
+
+    /// snapshot that contains all of the prices, that are active
 
     const products: any = [];
 
-    productsQuerySnap.docs.forEach(async (doc) => {
-        // const pricesRef = collection(db, 'products', doc.id, 'prices');
-        // const q = query(pricesRef);
-        // const pricesQuerySnap = await getDocs(q);
+   
 
-        const pricesRef = collection(db, 'products', doc.id, 'prices');
-        const pricesQuerySnap = await getDocs(pricesRef);
+    await Promise.all(productsQuerySnap.docs.map(async (document:any) => {
+        // console.log(document.id, ' => ', document.data());r
+        const priceData = document.data();
+        // console.log(priceData.product);
+        const productsRef = doc(db, 'products', priceData.product);
+        const basicProductRef = await getDoc(productsRef);
+        const basicProductInfo = basicProductRef.data();
+        // console.log(basicProductInfo);
+        const data = {
+            priceID: document.id,
+            price: document.data(),
+            ...basicProductInfo,
+        };
 
-        try {
-            let thing;
+        // console.log(data)
 
-            pricesQuerySnap.forEach((price) => {
-                thing = {
-                    id: price.id,
-                    ...price.data(),
-                };
-            });
+        products.push(data);
+    }))
 
-            const datas = {
-                id: doc.id,
-                ...doc.data(),
+    // console.log(thing.data())
 
-                prices: thing,
-            };
+    // productsQuerySnap.docs.forEach(async (doc) => {
+    //     // const pricesRef = collection(db, 'products', doc.id, 'prices');
+    //     // const q = query(pricesRef);
+    //     // const pricesQuerySnap = await getDocs(q);
 
-            products.push(datas);
-        } catch (err) {
-            console.log(err);
-        }
+    //     const pricesRef = collection(db, 'products', doc.id, 'prices');
+    //     const pricesQuerySnap = await getDocs(pricesRef);
 
-        // products.push({
-        //     id: doc.id,
-        //     ...doc.data(),
-        //     prices: pricesQuerySnap.docs.map((price) => {
-        //         return {
-        //             id: price.id,
-        //             ...price.data(),
-        //         };
-        //     }),
-        // });
-    });
+    //     try {
+    //         let thing;
+
+    //         pricesQuerySnap.forEach((price) => {
+    //             thing = {
+    //                 id: price.id,
+    //                 ...price.data(),
+    //             };
+    //         });
+
+    //         const datas = {
+    //             id: doc.id,
+    //             ...doc.data(),
+
+    //             prices: thing,
+    //         };
+
+    //         products.push(datas);
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // });
 
     return products;
 };

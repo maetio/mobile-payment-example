@@ -59,7 +59,6 @@ export const HomeScreen: React.FC<any> = () => {
     // };
 
     if (isLoading || isError) {
-        console.log(error);
 
         return <ActivityIndicator color="#36d7b7" />;
     }
