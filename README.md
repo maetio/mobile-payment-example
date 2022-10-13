@@ -30,6 +30,12 @@ This project has a clear focus on learning our stack(you can learn what technolo
 * Once you have gotten this far you shold now be able to see the Stripe extensions documention by going on the extensions tab and clicking manage next to stripe.
 * From here they really hold your hand in setting it up, so I recomend looking at the offical docs for getting your firebase and stripe extension connected.
 6. Test stripe connection, by going in the stripe dashboard and creating a product. Once you make a product you should be able to see it in FireStore.
+7. Paginating the products from FireStore:
+* Highly recomend looking at the offical pagination [Docs](https://firebase.google.com/docs/firestore/query-data/query-cursorsv) at FireStore. As well as looking at our code to get familair with pagination using RTK query.
+*In short, we need to make a hook with RTK query that takes in the the last id of all the items cuurently being displayed, and returns the next items from firebase. We also need to make sure we have an initial base case since we will not have data in the begining. 
+*Once we get this data we populate a flatlist and add the refresh funtionality to it, by reseting all of the initial parameters to the RTK hook.
+8. adding cart functionality:
+9. Finalizing the cart with stripe:
 
 ## ⚖️ Development Philosophy
 As an engineer at Maet, **we strive to create elegant features for our fellow developers and our users**. We have created the following values that help us in our purpose to build valuable developer tools and delightful user experiences.
