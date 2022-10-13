@@ -14,6 +14,23 @@ Maet is a sports-technology startup that is ***Redefining the Athletic Community
 
 Drop us a ⭐ if you find this template helpful! Additionally, if you want to stay up-to-date about Maet, visit our website at [Maet.io](https://www.maet.io/), or follow our [Instagram](https://instagram.com/playmaet) and [LinkedIn](https://www.linkedin.com/company/maetio). 
 
+## About this Project
+This project has a clear focus on learning our stack(you can learn what technologies we used further down the readme) as well as implamenting the Stripe payment extension from FireBase. With this project you will be able to display your own business's products or subscriptions directly from the Stripe dashboard. Products are displayed in an infinite scroll pagination list, allowing new data to be fetched everytime someone reaches the bottom of the page. Users can pick and choose items, and also refresh the page for any updated information. It also make new stripe users as soon as someone logins into the app for the first time. All this is wrapped together neat package that allows anyone to copy and paste this into their own app with a little setup.
+
+## Set-Up/usage:
+
+1. This project was not about authentication or setting up FireBase on your local machine. There are many reasources on setting up a react app with FireBase authentication and we even have some documentation on that in the resources tab. The first step to this project is having a react app, FireBase and Firebase authentication implamented in the app, and redux tool-kit installed. Once you have all this you are ready to continue with the setup.
+2. Add FireStore to your project, you can use either test mode or production mode.
+3. Make sure to add a 'users' collection in firestore whenever someone signs up for the first time. We have a simple sollution to this in our resources tab, however the way we actually implamented it was using RTK query. If you wish to make something more advanced, looking through the repo should be able to help.
+4. Make a basic stripe account, this is needed for the extension.
+5. Set up Stripe extension: 
+* In Firebase click the extensions tab next to autehntication and FireStore. This should pull up the payment options for stripe. To use firebase extensions, you must upgrate your plan to the "Blaze" plan. Don't worry about being charged unless you are making a product level app that has thousands of reads and write a day.
+* Once you upgraded your account, find the Stripe extension or click [here](https://firebase.google.com/products/extensions/stripe-firestore-stripe-payments) to locate to correct extension.
+* Click install in Console and choose the app you want to install it on. This will pull up a list of settings you can confgure. The only settings we recommend changing are changing the customer details to 'users', and changing the sync options from 'do not sync' to 'sync'. Installation might take a couple of minutes...
+* Once you have gotten this far you shold now be able to see the Stripe extensions documention by going on the extensions tab and clicking manage next to stripe.
+* From here they really hold your hand in setting it up, so I recomend looking at the offical docs for getting your firebase and stripe extension connected.
+6. Test stripe connection, by going in the stripe dashboard and creating a product. Once you make a product you should be able to see it in FireStore.
+
 ## ⚖️ Development Philosophy
 As an engineer at Maet, **we strive to create elegant features for our fellow developers and our users**. We have created the following values that help us in our purpose to build valuable developer tools and delightful user experiences.
 
@@ -44,6 +61,22 @@ A [**React Native**](https://reactnative.dev/), [**TypeScript**](https://www.typ
 * **Absolute Imports:** To avoid annoying relative imports, we have configured our tsconfig.json file and babel.config.js file to make use of absolute imports. It may be useful to reference the typescript documentation on [module resolution](https://www.typescriptlang.org/docs/handbook/module-resolution.html), or reference [this medium blog](https://medium.com/geekculture/making-life-easier-with-absolute-imports-react-in-javascript-and-typescript-bbdab8a8a3a1).
 * **Dark and Light Theme:** We configured our own [theme](https://github.com/maetio/template/blob/main/src/constants/theme.ts) to extent to themes for [NativeBase](https://docs.nativebase.io/customizing-theme) and [React Navigation](https://reactnavigation.org/docs/themes).
 * **Form Validation:** We are using [react-hook-form](https://react-hook-form.com/) and [yup](https://www.npmjs.com/package/yup) to validate our user inputs, checking them in our form-input component while passing the yup schema in the screens. [This tutorial](https://dev.to/franciscomendes10866/react-form-validation-with-react-hook-form-and-yup-4a98) is useful to reference. 
+
+## :newspaper: Resources
+Engineering can be tricky, so we compiled a list of great resources and videos that we believe will make setting up this project much easier.
+
+### :video_camera: Videos:
+
+* How do I [Paginate](https://www.youtube.com/watch?v=poqTHxtDXwU&t=2s) From FireStore. A great Video for getting an overview of what pagination is and how to impament it with FireStore.
+* [RTK Query](https://www.youtube.com/watch?v=HyZzCHgG3AY&t=160s) Crud overview. Although we used a query functions(queryfn), this is a great starting point for implamenting RTK query.
+* At users to collection on [Signup](https://www.youtube.com/watch?v=qWy9ylc3f9U). This video uses an older version of FireBase, but we still recomend it since it is very basic and allows anyone to add it to their project.
+* Implamenting Stripe payment with Firebase, [video 1](https://www.youtube.com/watch?v=5rc0pe2qRjg&t=1119s), [video 2](https://www.youtube.com/watch?v=VnntkusKinM&t=661s). There are not too many extensive videos on this topic, however with both of these and the offical stripe documentation, you should be ready to get payments in your app!
+
+
+### :gear: Documentation and articles:
+* Offical Pagination with FireStore [Docs](https://firebase.google.com/docs/firestore/query-data/query-cursors). Highly recommend the FireStore docs, for everything FireStore related.
+* RTK Query custom functions [Docs](https://redux-toolkit.js.org/rtk-query/usage/customizing-queries) since we are not using endpoints like a traditional API, we recommend learning about the queryFn tool that we used to connect RTK to FireStore.
+* Unfortunately you can not look at the stripe FireBase extension docs without downloading it to your own FireBase project. We have instrutions on how to set this up further up in this readme. In the meantime, you can look at the offical Stripe Docs [here](https://stripe.com/docs/checkout/quickstart), and get the stripe exteion downloaded [here](https://firebase.google.com/products/extensions/stripe-firestore-stripe-payments).
 
 ## 🔧 Usage
 > Be sure to have the [Expo CLI](https://docs.expo.io/workflow/expo-cli/) installed.
