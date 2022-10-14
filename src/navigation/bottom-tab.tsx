@@ -2,16 +2,18 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import { ExploreScreen } from 'src/screens';
 import { ProfileScreen } from 'src/screens/profile-screen';
-import { MaterialCommunityIcons, MaterialIcons, AntDesign } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons, AntDesign, Entypo } from '@expo/vector-icons';
 import { ProductsScreen } from 'src/screens/products-screen';
 import { CartScreen } from 'src/screens/cart-screen';
 import { HomeStackNavigator } from './home-stack';
+import { MapScreen } from 'src/screens/map-screen';
 
 export type BottomTabParams = {
     HomeTab: undefined;
     Explore: undefined;
     Profile: undefined;
     Cart: undefined;
+    Map: undefined;
 };
 
 const Tabs = createBottomTabNavigator<BottomTabParams>();
@@ -38,6 +40,10 @@ const ProfileIcon = ({ focused, color, size }: TabBarIconProps) => (
 
 const CartIcon = ({ focused, color, size }: TabBarIconProps) => (
     <AntDesign name={focused ? 'shoppingcart' : 'shoppingcart'} color={color} size={size} />
+);
+
+const MapIcon = ({ focused, color, size }: TabBarIconProps) => (
+    <Entypo name={focused ? 'map' : 'map'} color={color} size={size} />
 );
 
 export const BottomTabNavigator: React.FC<any> = () => {
@@ -76,6 +82,14 @@ export const BottomTabNavigator: React.FC<any> = () => {
                 options={{
                     headerTitle: 'Cart',
                     tabBarIcon: CartIcon,
+                }}
+            />
+            <Tabs.Screen
+                name="Map"
+                component={MapScreen}
+                options={{
+                    headerTitle: 'Map',
+                    tabBarIcon: MapIcon,
                 }}
             />
 
