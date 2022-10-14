@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Text } from 'native-base';
 import * as Location from 'expo-location';
+import { geohashForLocation } from 'geofire-common';
 
 export const MapScreen = () => {
     const [location, setLocation] = useState<object | null>(null);
@@ -17,6 +18,12 @@ export const MapScreen = () => {
             let location = await Location.getCurrentPositionAsync({});
             setLocation(location);
         })();
+
+        const lat = 51.5074;
+        const lng = 0.1278;
+        const hash = geohashForLocation([lat, lng]);
+
+        console.log(hash);
     }, []);
 
     let text = 'Waiting..';
