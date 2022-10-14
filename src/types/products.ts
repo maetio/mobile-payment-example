@@ -3,6 +3,9 @@ export interface BasicProductData {
     name: string;
     price: number;
     id?: string;
+    lat?: number;
+    long?: number;
+    geohash?: string;
 }
 
 type ImageMap = { [imageName: string]: string };

@@ -68,7 +68,8 @@ export const ProductsScreen = () => {
 
         data?.length === 0 ? setLastPostStatus(true) : setLastPostStatus(false);
 
-        console.log(data?.length);
+        // console.log(data?.length);
+        console.log(products);
         // console.log(data);
     }, [data]);
 
