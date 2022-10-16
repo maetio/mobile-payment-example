@@ -110,7 +110,7 @@ export const MapScreen = () => {
 
             const thing = await Promise.all(promises)
                 .then((snapShots) => {
-                    const matchingDocs = [];
+                    const matchingDocs: any = [];
 
                     for (const snap of snapShots) {
                         for (const doc of snap.docs) {
@@ -125,7 +125,8 @@ export const MapScreen = () => {
                             const distanceInKm = distanceBetween([lat, lng], location);
                             const distanceInM = distanceInKm * 1000;
                             if (distanceInM <= radius) {
-                                matchingDocs.push(doc.data());
+                                const locationProd = { ...doc.data(), id: doc.id };
+                                matchingDocs.push(locationProd);
                             }
                         }
                     }
@@ -137,16 +138,16 @@ export const MapScreen = () => {
                     return matchingDocs;
                 });
             // const thingers = await Promise.all(thing)
-            console.log(thing);
+            // console.log(thing);
             return thing;
         }
     };
 
     const getPost = async () => {
         const thing: any = await fetchCloseData();
-        // console.log(`thing ${thing}`);
-        // console.log(thing);
-        // setProducts([thing]);
+        console.log(`thing ${thing}`);
+        console.log(thing);
+        setProducts(thing);
         // console.log(product);
     };
 
@@ -158,19 +159,14 @@ export const MapScreen = () => {
     }
 
     return (
-        <Box>
-            <Text>Hello map</Text>
-            <Text>{text}</Text>
-            {/* <Text>{product}</Text> */}
-            {/* <Box w="100%" bg="primary.500" flex={1} justifyContent="space-around">
-                <FlatList
-                    data={product}
-                    renderItem={({ item }) => <Product productData={item} key={item.id} />}
-                    showsVerticalScrollIndicator={false}
-                    onEndReachedThreshold={0.01}
-                    scrollEventThrottle={150}
-                />
-            </Box> */}
+        <Box w="100%" bg="primary.500" flex={1} justifyContent="space-around">
+            <FlatList
+                data={product}
+                renderItem={({ item }) => <Product productData={item} key={item.id} />}
+                showsVerticalScrollIndicator={false}
+                onEndReachedThreshold={0.01}
+                scrollEventThrottle={150}
+            />
         </Box>
     );
 };
