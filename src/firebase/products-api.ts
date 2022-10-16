@@ -9,7 +9,10 @@ import {
     startAfter,
     where,
     collectionGroup,
+    startAt,
+    endAt,
 } from 'firebase/firestore';
+import { geohashForLocation, geohashQueryBounds } from 'geofire-common';
 import { db } from 'src/firebase/firebase-config';
 import { BasicProductData, DetailedProductData } from 'src/types/products';
 import { converters } from './db-converters';
@@ -91,4 +94,30 @@ export const fetchStripeProducts = async () => {
     );
 
     return products;
+};
+
+export const fetchCloseData = async (location:any) => {
+    const radius = 4 * 1000;
+
+    const bounds = geohashQueryBounds(location, radius);
+    const promises = [];
+    for (const b of bounds) {
+        const colRef = collection(db, 'basic-product-data').withConverter<BasicProductData>(
+            converters.productData,
+        );
+        const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
+        const data = await getDocs(q);
+        console.log(data);
+
+        const prod: BasicProductData[] = [];
+
+        await Promise.all(
+            data.docs.map((doc) => {
+                const datas = { ...doc.data(), id: doc.id };
+                prod.push(datas);
+            }),
+        );
+
+        return prod;
+    }
 };

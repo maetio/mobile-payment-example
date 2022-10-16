@@ -1,18 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Text, FlatList } from 'native-base';
 import * as Location from 'expo-location';
-import { geohashForLocation, geohashQueryBounds } from 'geofire-common';
+import { geohashForLocation, geohashQueryBounds, distanceBetween } from 'geofire-common';
 import { db } from 'src/firebase/firebase-config';
-import { collection, startAt, endAt, orderBy, query, getDocs } from 'firebase/firestore';
+import {
+    collection,
+    startAt,
+    endAt,
+    orderBy,
+    query,
+    getDocs,
+    getDoc,
+    doc,
+} from 'firebase/firestore';
 import { async } from '@firebase/util';
 import { Product } from 'src/cards/product';
+import { BasicProductData } from 'src/types/products';
+import { converters } from 'src/firebase/db-converters';
 
-type Geopoint = [number, number];
+// import { fetchCloseData } from 'src/firebase/products-api';
+// import { useFetchLocationProductsQuery } from 'src/services/products-queries';
+
+type Location = [number, number];
 
 export const MapScreen = () => {
-    const [location, setLocation] = useState<Geopoint>();
+    const [location, setLocation] = useState<Location>();
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
-    const [product, setProducts] = useState();
+    const [product, setProducts] = useState<BasicProductData[]>();
+
+    // const { data, isFetching, isLoading, isError, error, isSuccess, refetch } =
+    //     useFetchLocationProductsQuery(location);
 
     useEffect(() => {
         (async () => {
@@ -45,30 +62,92 @@ export const MapScreen = () => {
         console.log(product);
     }, [location]);
 
+    // const fetchCloseData = async () => {
+    //     const radius = 4 * 1000;
+
+    //     if (location?.length === 2) {
+    //         const bounds = geohashQueryBounds(location, radius);
+    //         const promises = [];
+    //         for (const b of bounds) {
+    //             const colRef = collection(db, 'basic-product-data').withConverter<BasicProductData>(
+    //                 converters.productData,
+    //             );
+    //             const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
+    //             const data = await getDocs(q);
+    //             // console.log(data);
+
+    //             // const prod: BasicProductData[] = [];
+
+    //             // await Promise.all(
+    //             data.docs.map((doc) => {
+    //                 // console.log(doc.data());
+    //                 const datas = { ...doc.data(), id: doc.id };
+    //                 // prod.push(datas);
+    //                 console.log(datas);
+    //             });
+    //             // );
+
+    //             // return prod;
+    //         }
+    //     }
+    // };
+
     const fetchCloseData = async () => {
-        const radius = 4 * 1000;
+        const radius = 15 * 1000;
 
         if (location?.length === 2) {
             const bounds = geohashQueryBounds(location, radius);
             const promises = [];
+
             for (const b of bounds) {
-                const colRef = collection(db, 'basic-product-data');
+                const colRef = collection(db, 'basic-product-data') as any;
                 const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
-                const data = await getDocs(q);
-                // console.log(data);
-                const matchingDocs = [];
-                data.docs.forEach((doc) => {
-                    console.log(doc.data());
-                });
+
+                const datas = (await getDocs(q)) as any;
+
+                promises.push(datas);
             }
 
-            // return promises;
+            const thing = await Promise.all(promises)
+                .then((snapShots) => {
+                    const matchingDocs = [];
+
+                    for (const snap of snapShots) {
+                        for (const doc of snap.docs) {
+                            const lat = doc.get('lat');
+                            const lng = doc.get('long');
+
+                            // console.log(lat);
+                            // console.log(lng);
+
+                            // We have to filter out a few false positives due to GeoHash
+                            // accuracy, but most will match
+                            const distanceInKm = distanceBetween([lat, lng], location);
+                            const distanceInM = distanceInKm * 1000;
+                            if (distanceInM <= radius) {
+                                matchingDocs.push(doc.data());
+                            }
+                        }
+                    }
+                    // console.log(matchingDocs);
+                    return matchingDocs;
+                })
+                .then((matchingDocs) => {
+                    // console.log(matchingDocs);
+                    return matchingDocs;
+                });
+            // const thingers = await Promise.all(thing)
+            console.log(thing);
+            return thing;
         }
     };
 
     const getPost = async () => {
         const thing: any = await fetchCloseData();
-        setProducts(thing);
+        // console.log(`thing ${thing}`);
+        // console.log(thing);
+        // setProducts([thing]);
+        // console.log(product);
     };
 
     let text = 'Waiting..';
@@ -82,7 +161,7 @@ export const MapScreen = () => {
         <Box>
             <Text>Hello map</Text>
             <Text>{text}</Text>
-            <Text>{product}</Text>
+            {/* <Text>{product}</Text> */}
             {/* <Box w="100%" bg="primary.500" flex={1} justifyContent="space-around">
                 <FlatList
                     data={product}
