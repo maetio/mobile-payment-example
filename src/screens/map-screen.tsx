@@ -93,7 +93,8 @@ export const MapScreen = () => {
     // };
 
     const fetchCloseData = async () => {
-        const radius = 15 * 1000;
+        const radius = 2000 * 1000;
+        // const radius = Infinity;
 
         if (location?.length === 2) {
             const bounds = geohashQueryBounds(location, radius);
