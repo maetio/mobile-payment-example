@@ -22,6 +22,7 @@ import {
     StripeProductBasic,
 } from 'src/types/stripe-products';
 
+
 export const fetchProducts = async (lastDocumentID: string | undefined) => {
     const colRef = collection(db, 'basic-product-data').withConverter<BasicProductData>(
         converters.productData,
@@ -96,28 +97,54 @@ export const fetchStripeProducts = async () => {
     return products;
 };
 
-export const fetchCloseData = async (location:any) => {
-    const radius = 4 * 1000;
+// export const fetchCloseData = async (location:any) => {
+//     const radius = 2000 * 1000;
+//     // const radius = Infinity;
 
-    const bounds = geohashQueryBounds(location, radius);
-    const promises = [];
-    for (const b of bounds) {
-        const colRef = collection(db, 'basic-product-data').withConverter<BasicProductData>(
-            converters.productData,
-        );
-        const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
-        const data = await getDocs(q);
-        console.log(data);
+//     if (location?.length === 2) {
+//         const bounds = geohashQueryBounds(location, radius);
+//         const promises = [];
 
-        const prod: BasicProductData[] = [];
+//         for (const b of bounds) {
+//             const colRef = collection(db, 'basic-product-data') as any;
+//             const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
 
-        await Promise.all(
-            data.docs.map((doc) => {
-                const datas = { ...doc.data(), id: doc.id };
-                prod.push(datas);
-            }),
-        );
+//             const datas = (await getDocs(q)) as any;
 
-        return prod;
-    }
-};
+//             promises.push(datas);
+//         }
+
+//         const thing = await Promise.all(promises)
+//             .then((snapShots) => {
+//                 const matchingDocs: any = [];
+
+//                 for (const snap of snapShots) {
+//                     for (const doc of snap.docs) {
+//                         const lat = doc.get('lat');
+//                         const lng = doc.get('long');
+
+//                         // console.log(lat);
+//                         // console.log(lng);
+
+//                         // We have to filter out a few false positives due to GeoHash
+//                         // accuracy, but most will match
+//                         const distanceInKm = distanceBetween([lat, lng], location);
+//                         const distanceInM = distanceInKm * 1000;
+//                         if (distanceInM <= radius) {
+//                             const locationProd = { ...doc.data(), id: doc.id };
+//                             matchingDocs.push(locationProd);
+//                         }
+//                     }
+//                 }
+//                 // console.log(matchingDocs);
+//                 return matchingDocs;
+//             })
+//             .then((matchingDocs) => {
+//                 // console.log(matchingDocs);
+//                 return matchingDocs;
+//             });
+//         // const thingers = await Promise.all(thing)
+//         // console.log(thing);
+//         return thing;
+//     }
+// };

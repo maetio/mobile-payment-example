@@ -1,12 +1,8 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BasicProductData, DetailedProductData } from 'src/types/products';
 import { StripeProducts } from 'src/types/stripe-products';
-import {
-    fetchDetailedData,
-    fetchProducts,
-    fetchStripeProducts,
-    fetchCloseData,
-} from 'src/firebase/products-api';
+import { fetchDetailedData, fetchProducts, fetchStripeProducts } from 'src/firebase/products-api';
+import { fetchCloseData } from 'src/firebase/map-api';
 import { LastDoc } from 'src/types/last-document';
 
 export const productsApi = createApi({
