@@ -1,9 +1,13 @@
 import { collection, getDocs, query, orderBy, startAt, endAt } from 'firebase/firestore';
 import { geohashQueryBounds, distanceBetween } from 'geofire-common';
 import { db } from './firebase-config';
+import { LocationArray } from 'src/types/products';
+import { BasicProductData } from 'src/types/products';
+import { converters } from './db-converters';
 
-export const fetchCloseData = async (location: any) => {
-    const radius = 1000 * 1000;
+export const fetchCloseData = async (location: LocationArray, distance: number) => {
+    // const radius = 2000 * 1000;
+    const radius = distance * 1000;
     // const radius = Infinity;
 
     if (location?.length === 2) {
@@ -11,17 +15,19 @@ export const fetchCloseData = async (location: any) => {
         const promises = [];
 
         for (const b of bounds) {
-            const colRef = collection(db, 'basic-product-data') as any;
+            const colRef = collection(db, 'basic-product-data').withConverter<BasicProductData>(
+                converters.productData,
+            );
             const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
 
-            const datas = (await getDocs(q)) as any;
+            const datas = await getDocs(q);
 
             promises.push(datas);
         }
 
         const thing = await Promise.all(promises)
             .then((snapShots) => {
-                const matchingDocs: any = [];
+                const matchingDocs: BasicProductData[] = [];
 
                 for (const snap of snapShots) {
                     for (const doc of snap.docs) {
@@ -46,7 +52,7 @@ export const fetchCloseData = async (location: any) => {
             })
             .then((matchingDocs) => {
                 // console.log(matchingDocs);
-                return matchingDocs;
+                return matchingDocs.reverse();
             });
         // const thingers = await Promise.all(thing)
         // console.log(thing);

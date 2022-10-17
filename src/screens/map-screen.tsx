@@ -1,35 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, FlatList } from 'native-base';
+import { Box, Text, FlatList, Slider } from 'native-base';
 import * as Location from 'expo-location';
 import { geohashForLocation, geohashQueryBounds, distanceBetween } from 'geofire-common';
 import { db } from 'src/firebase/firebase-config';
-import {
-    collection,
-    startAt,
-    endAt,
-    orderBy,
-    query,
-    getDocs,
-    getDoc,
-    doc,
-} from 'firebase/firestore';
 import { async } from '@firebase/util';
 import { Product } from 'src/cards/product';
 import { BasicProductData } from 'src/types/products';
 import { converters } from 'src/firebase/db-converters';
 
 import { fetchCloseData } from 'src/firebase/map-api';
-// import { useFetchLocationProductsQuery } from 'src/services/products-queries';
+import { useFetchLocationProductsQuery } from 'src/services/products-queries';
+import { LocationArray } from 'src/types/products';
+import { DistanceProducts } from 'src/types/products';
 
-type Location = [number, number];
+// type Location = [number, number];
 
 export const MapScreen = () => {
-    const [location, setLocation] = useState<Location>();
+    const [location, setLocation] = useState<LocationArray>();
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [product, setProducts] = useState<BasicProductData[]>();
+    const [distance, setDistance] = useState<number>(50);
+    const [inputToRTK, setInputToRTK] = useState<DistanceProducts | undefined>();
 
-    // const { data, isFetching, isLoading, isError, error, isSuccess, refetch } =
-    //     useFetchLocationProductsQuery(location);
+    const { data, isFetching, isLoading, isError, error, isSuccess, refetch } =
+        useFetchLocationProductsQuery(inputToRTK);
 
     useEffect(() => {
         (async () => {
@@ -55,72 +49,35 @@ export const MapScreen = () => {
         // text = JSON.stringify(location);
 
         // console.log(text.latitude);
+
+        const datas = {
+            loc: location,
+            dis: distance,
+        };
+        setInputToRTK(datas);
     }, []);
 
     useEffect(() => {
-        getPost();
+        // getPost();
+        setProducts(data);
         console.log(product);
-    }, [location]);
+    }, [data]);
 
-    // const fetchCloseData = async () => {
-    //     const radius = 2000 * 1000;
-    //     // const radius = Infinity;
+    useEffect(() => {
+        const datas = {
+            loc: location,
+            dis: distance,
+        };
+        setInputToRTK(datas);
+    }, [distance]);
 
-    //     if (location?.length === 2) {
-    //         const bounds = geohashQueryBounds(location, radius);
-    //         const promises = [];
-
-    //         for (const b of bounds) {
-    //             const colRef = collection(db, 'basic-product-data') as any;
-    //             const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
-
-    //             const datas = (await getDocs(q)) as any;
-
-    //             promises.push(datas);
-    //         }
-
-    //         const thing = await Promise.all(promises)
-    //             .then((snapShots) => {
-    //                 const matchingDocs: any = [];
-
-    //                 for (const snap of snapShots) {
-    //                     for (const doc of snap.docs) {
-    //                         const lat = doc.get('lat');
-    //                         const lng = doc.get('long');
-
-    //                         // console.log(lat);
-    //                         // console.log(lng);
-
-    //                         // We have to filter out a few false positives due to GeoHash
-    //                         // accuracy, but most will match
-    //                         const distanceInKm = distanceBetween([lat, lng], location);
-    //                         const distanceInM = distanceInKm * 1000;
-    //                         if (distanceInM <= radius) {
-    //                             const locationProd = { ...doc.data(), id: doc.id };
-    //                             matchingDocs.push(locationProd);
-    //                         }
-    //                     }
-    //                 }
-    //                 // console.log(matchingDocs);
-    //                 return matchingDocs;
-    //             })
-    //             .then((matchingDocs) => {
-    //                 // console.log(matchingDocs);
-    //                 return matchingDocs;
-    //             });
-    //         // const thingers = await Promise.all(thing)
-    //         // console.log(thing);
-    //         return thing;
-    //     }
+    // const getPost = async () => {
+    //     const thing: any = await fetchCloseData(location);
+    //     console.log(`thing ${thing}`);
+    //     console.log(thing);
+    //     setProducts(thing);
+    //     // console.log(product);
     // };
-
-    const getPost = async () => {
-        const thing: any = await fetchCloseData(location);
-        console.log(`thing ${thing}`);
-        console.log(thing);
-        setProducts(thing);
-        // console.log(product);
-    };
 
     let text = 'Waiting..';
     if (errorMsg) {
@@ -131,6 +88,24 @@ export const MapScreen = () => {
 
     return (
         <Box w="100%" bg="primary.500" flex={1} justifyContent="space-around">
+            <Text>Distance from your location</Text>
+            <Slider
+                w="3/4"
+                maxW="300"
+                defaultValue={distance}
+                minValue={10}
+                maxValue={2000}
+                accessibilityLabel="hello world"
+                step={100}
+                onChangeEnd={(v) => {
+                    setDistance(v);
+                }}>
+                <Slider.Track>
+                    <Slider.FilledTrack />
+                </Slider.Track>
+                <Slider.Thumb />
+            </Slider>
+            <Text>{distance}Km</Text>
             <FlatList
                 data={product}
                 renderItem={({ item }) => <Product productData={item} key={item.id} />}

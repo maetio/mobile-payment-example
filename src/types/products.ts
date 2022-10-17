@@ -24,3 +24,10 @@ export interface DetailedProductData {
     desc?: string | undefined;
     qty?: number | undefined;
 }
+
+export type LocationArray = [number, number];
+
+export interface DistanceProducts {
+    loc: LocationArray | undefined;
+    dis: number;
+}

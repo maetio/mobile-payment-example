@@ -4,6 +4,7 @@ import { StripeProducts } from 'src/types/stripe-products';
 import { fetchDetailedData, fetchProducts, fetchStripeProducts } from 'src/firebase/products-api';
 import { fetchCloseData } from 'src/firebase/map-api';
 import { LastDoc } from 'src/types/last-document';
+import { DistanceProducts } from 'src/types/products';
 
 export const productsApi = createApi({
     reducerPath: 'productsApi',
@@ -56,13 +57,13 @@ export const productsApi = createApi({
             providesTags: ['Product'],
         }),
 
-        fetchLocationProducts: builder.query<BasicProductData[], any>({
-            async queryFn(location) {
+        fetchLocationProducts: builder.query<BasicProductData[], DistanceProducts | undefined>({
+            async queryFn(obj) {
                 // console.log(lastDocID);
                 console.log('from query');
 
                 try {
-                    const prod = await fetchCloseData(location);
+                    const prod = obj?.loc ? await fetchCloseData(obj?.loc, obj?.dis) : undefined;
                     console.log(prod);
 
                     return { data: prod };
