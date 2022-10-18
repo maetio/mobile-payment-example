@@ -41,7 +41,7 @@ export const MapScreen = () => {
 
             setLocation(loxz);
 
-            console.log(location);
+            // console.log(location);
 
             const datas = {
                 loc: loxz,
@@ -70,7 +70,7 @@ export const MapScreen = () => {
     useEffect(() => {
         // getPost();
         setProducts(data);
-        console.log(product);
+        // console.log(product);
     }, [data]);
 
     useEffect(() => {

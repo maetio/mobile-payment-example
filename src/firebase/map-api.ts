@@ -52,7 +52,16 @@ export const fetchCloseData = async (location: LocationArray, distance: number) 
             })
             .then((matchingDocs) => {
                 // console.log(matchingDocs);
-                return matchingDocs.reverse();
+                // return matchingDocs.reverse();
+
+                return matchingDocs.sort((el1, el2) => {
+                    // console.log(el1.lat, el2.long);
+
+                    return (
+                        distanceBetween([el1.lat, el1.long], location) -
+                        distanceBetween([el2.lat, el2.long], location)
+                    );
+                });
             });
         // const thingers = await Promise.all(thing)
         // console.log(thing);

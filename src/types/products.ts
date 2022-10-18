@@ -3,8 +3,8 @@ export interface BasicProductData {
     name: string;
     price: number;
     id?: string;
-    lat?: number;
-    long?: number;
+    lat: number;
+    long: number;
     geohash?: string;
 }
 
