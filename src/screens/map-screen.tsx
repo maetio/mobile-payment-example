@@ -12,6 +12,7 @@ import { fetchCloseData } from 'src/firebase/map-api';
 import { useFetchLocationProductsQuery } from 'src/services/products-queries';
 import { LocationArray } from 'src/types/products';
 import { DistanceProducts } from 'src/types/products';
+import { ActivityIndicator } from 'react-native';
 
 // type Location = [number, number];
 
@@ -94,6 +95,10 @@ export const MapScreen = () => {
         text = errorMsg;
     } else if (location) {
         text = JSON.stringify(location);
+    }
+
+    if (isLoading) {
+        return <ActivityIndicator color="#36d7b7" />;
     }
 
     return (
