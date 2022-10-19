@@ -1,7 +1,7 @@
-export interface ScreenParams {
+export interface ScreenParams<T> {
     /*
         Params for every screen, defined the React Navigation props: https://reactnavigation.org/docs/params/
     */
-    route?: any | undefined;
+    route: T;
     navigation?: any | undefined;
 }

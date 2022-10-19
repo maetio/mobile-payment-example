@@ -7,6 +7,9 @@ import { DetailedProductData } from 'src/types/products';
 import { useAppDispatch, useAppSelector } from 'src/hooks/useful-ducks';
 import { addToCart } from 'src/ducks/cart-slice';
 import { useFetchDetailedProductQuery } from 'src/services/products-queries';
+import { ScreenParams } from 'src/types/screen';
+import { ProductStackParam } from 'src/navigation/product-stack';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 
 interface routeID {
     children: React.ReactNode;
@@ -18,7 +21,9 @@ interface routeID {
     };
 }
 
-export const ProductViewScreen: React.FC<routeID> = ({ route }) => {
+type ProductRouteProp = RouteProp<ProductStackParam, 'Product'>;
+
+export const ProductViewScreen: React.FC<ScreenParams<ProductRouteProp>> = ({ route }) => {
     // const [detailedData, setDetailedData] = useState<Partial<DetailedProductData>>();
     const [detailedData, setDetailedData] = useState<DetailedProductData | null>();
 

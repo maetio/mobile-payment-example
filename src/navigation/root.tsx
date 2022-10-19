@@ -34,11 +34,11 @@ export const RootNavigator: React.FC<RootParams> = ({ scheme }) => {
                 />
                 {/* <StackNav.Screen name="Product" component={ProductStack} /> */}
 
-                <StackNav.Screen
+                {/* <StackNav.Screen
                     name="Product"
                     component={ProductViewScreen}
                     options={{ animationTypeForReplace: 'pop' }}
-                />
+                /> */}
             </StackNav.Navigator>
         </NavigationContainer>
     );

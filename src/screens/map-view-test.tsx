@@ -17,6 +17,7 @@ export const MapViewTest = () => {
     const [product, setProducts] = useState<BasicProductData[]>();
     const [distanceLabel, setDistanceLabel] = useState(50);
     const [distance, setDistance] = useState(50);
+    const [regionChange, setRegionChange] = useState<any>();
 
     const { data, isFetching, isLoading, isError, error, isSuccess, refetch } =
         useFetchLocationProductsQuery(inputToRTK);
@@ -64,6 +65,10 @@ export const MapViewTest = () => {
             {location ? (
                 <MapView
                     style={styles.map}
+                    onRegionChangeComplete={(e) => {
+                        console.log(e);
+                        setRegionChange(e);
+                    }}
                     initialRegion={{
                         latitude: location[0],
                         longitude: location[1],
@@ -115,6 +120,11 @@ export const MapViewTest = () => {
                 <Slider.Thumb />
             </Slider>
             <Text>{distanceLabel}Km</Text>
+            <Text>{location && `Location on Load, ${location[0]}, ${location[1]}`}</Text>
+            <Text>
+                {location && regionChange &&
+                    `Changing Location, ${regionChange.latitude.toFixed(6)}, ${regionChange.longitude.toFixed(6)}`}
+            </Text>
         </Box>
     );
 };
