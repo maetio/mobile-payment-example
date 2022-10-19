@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import MapView, { Marker } from 'react-native-maps';
+import { Box } from 'native-base';
+import MapView, { Marker, Circle } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
 import { LocationArray } from 'src/types/products';
@@ -48,7 +49,7 @@ export const MapViewTest = () => {
     }, [data]);
 
     return (
-        <View style={styles.container}>
+        <Box style={styles.container}>
             {location ? (
                 <MapView
                     style={styles.map}
@@ -74,11 +75,12 @@ export const MapViewTest = () => {
                                     }}></Marker>
                             );
                         })}
+                    <Circle center={{ latitude: location[0], longitude: location[1] }} radius={1000} />
                 </MapView>
             ) : (
                 <ActivityIndicator color="#36d7b7" />
             )}
-        </View>
+        </Box>
     );
 };
 
@@ -87,10 +89,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'center',
+        // justifyContent: 'center',
     },
     map: {
         width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
+        // height: Dimensions.get('window').height,
+        height: '50%',
     },
 });
