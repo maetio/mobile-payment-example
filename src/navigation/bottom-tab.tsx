@@ -7,6 +7,7 @@ import { ProductsScreen } from 'src/screens/products-screen';
 import { CartScreen } from 'src/screens/cart-screen';
 import { HomeStackNavigator } from './home-stack';
 import { MapScreen } from 'src/screens/map-screen';
+import { MapViewTest } from 'src/screens/map-view-test';
 
 export type BottomTabParams = {
     HomeTab: undefined;
@@ -14,6 +15,7 @@ export type BottomTabParams = {
     Profile: undefined;
     Cart: undefined;
     Map: undefined;
+    MapTest: undefined;
 };
 
 const Tabs = createBottomTabNavigator<BottomTabParams>();
@@ -89,6 +91,14 @@ export const BottomTabNavigator: React.FC<any> = () => {
                 component={MapScreen}
                 options={{
                     headerTitle: 'Map',
+                    tabBarIcon: MapIcon,
+                }}
+            />
+            <Tabs.Screen
+                name="MapTest"
+                component={MapViewTest}
+                options={{
+                    headerTitle: 'MapTest',
                     tabBarIcon: MapIcon,
                 }}
             />

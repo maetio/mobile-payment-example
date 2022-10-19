@@ -80,6 +80,8 @@ export const fetchCloseData = async (location: LocationArray, distance: number) 
 
     if (location?.length === 2) {
         const bounds = geohashQueryBounds(location, radius);
+        console.log('bounds');
+        console.log(bounds);
         const promises = [];
 
         // Docs way
@@ -88,7 +90,7 @@ export const fetchCloseData = async (location: LocationArray, distance: number) 
             const colRef = collection(db, 'basic-product-data').withConverter<BasicProductData>(
                 converters.productData,
             );
-            const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
+            const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]), limit(2));
             // const q = query(colRef, orderBy('geohash'));
 
             const datas = await getDocs(q);
