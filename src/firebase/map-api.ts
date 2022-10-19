@@ -90,7 +90,9 @@ export const fetchCloseData = async (location: LocationArray, distance: number) 
             const colRef = collection(db, 'basic-product-data').withConverter<BasicProductData>(
                 converters.productData,
             );
-            const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]), limit(2));
+            // const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]), limit(3));
+            const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
+
             // const q = query(colRef, orderBy('geohash'));
 
             const datas = await getDocs(q);
@@ -113,7 +115,7 @@ export const fetchCloseData = async (location: LocationArray, distance: number) 
                 const distanceInM = distanceInKm * 1000;
                 console.log(distanceInKm);
                 if (distanceInM <= radius) {
-                    const locationProd = { ...doc.data(), id: doc.id };
+                    const locationProd = { ...doc.data(), id: doc.id, distanceInKm };
                     matchingDocs.push(locationProd);
                 }
             }
