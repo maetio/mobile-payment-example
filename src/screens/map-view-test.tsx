@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Box } from 'native-base';
+import { Box, Slider } from 'native-base';
 import MapView, { Marker, Circle } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
@@ -15,6 +15,8 @@ export const MapViewTest = () => {
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [inputToRTK, setInputToRTK] = useState<DistanceProducts | undefined>();
     const [product, setProducts] = useState<BasicProductData[]>();
+    const [distanceLabel, setDistanceLabel] = useState(50);
+    const [distance, setDistance] = useState(50);
 
     const { data, isFetching, isLoading, isError, error, isSuccess, refetch } =
         useFetchLocationProductsQuery(inputToRTK);
@@ -36,7 +38,8 @@ export const MapViewTest = () => {
 
             const datas = {
                 loc: loxz,
-                dis: 100,
+                // dis: distance,
+                dis: 1000,
             };
             setInputToRTK(datas);
         })();
@@ -47,6 +50,14 @@ export const MapViewTest = () => {
         setProducts(data);
         // console.log(product);
     }, [data]);
+
+    useEffect(() => {
+        const datas = {
+            loc: location,
+            dis: distance,
+        };
+        setInputToRTK(datas);
+    }, [distance]);
 
     return (
         <Box style={styles.container}>
@@ -75,11 +86,35 @@ export const MapViewTest = () => {
                                     }}></Marker>
                             );
                         })}
-                    <Circle center={{ latitude: location[0], longitude: location[1] }} radius={1000} />
+                    <Circle
+                        center={{ latitude: location[0], longitude: location[1] }}
+                        radius={1000 * distance}
+                    />
                 </MapView>
             ) : (
                 <ActivityIndicator color="#36d7b7" />
             )}
+
+            <Slider
+                w="3/4"
+                maxW="300"
+                defaultValue={distance}
+                minValue={10}
+                maxValue={2000}
+                accessibilityLabel="hello world"
+                step={100}
+                onChangeEnd={(v) => {
+                    setDistance(v);
+                }}
+                onChange={(v) => {
+                    setDistanceLabel(v);
+                }}>
+                <Slider.Track>
+                    <Slider.FilledTrack />
+                </Slider.Track>
+                <Slider.Thumb />
+            </Slider>
+            <Text>{distanceLabel}Km</Text>
         </Box>
     );
 };
