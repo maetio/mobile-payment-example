@@ -38,12 +38,12 @@ export const MapViewTest = () => {
 
             setLocation(loxz);
 
-            const datas = {
-                loc: loxz,
-                // dis: distance,
-                dis: 1000,
-            };
-            setInputToRTK(datas);
+            // const datas = {
+            //     loc: loxz,
+            //     dis: distance,
+            //     // dis: 1000,
+            // };
+            // setInputToRTK(datas);
         })();
     }, []);
 
@@ -53,13 +53,34 @@ export const MapViewTest = () => {
         // console.log(product);
     }, [data]);
 
+    // for using slider
+
+    // useEffect(() => {
+    //     const datas = {
+    //         loc: location,
+    //         dis: distance,
+    //     };
+    //     setInputToRTK(datas);
+    // }, [distance]);
+
+    // END of using slider effect
+
+    // New way to get  it off of the current location of map
+
     useEffect(() => {
-        const datas = {
-            loc: location,
-            dis: distance,
-        };
-        setInputToRTK(datas);
-    }, [distance]);
+        if (regionChange) {
+            const locx: LocationArray = [regionChange.latitude, regionChange.longitude];
+            const datas = {
+                loc: locx,
+                dis: regionChange.latitudeDelta * 500 * 110.9472,
+            };
+
+            console.log(datas);
+            setInputToRTK(datas);
+        }
+    }, [regionChange]);
+
+    // END of NEW way
 
     return (
         <Box style={styles.container}>
@@ -67,7 +88,7 @@ export const MapViewTest = () => {
                 <MapView
                     style={styles.map}
                     onRegionChangeComplete={(e) => {
-                        console.log(e);
+                        // console.log(e);
                         setRegionChange(e);
                     }}
                     initialRegion={{

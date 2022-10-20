@@ -76,7 +76,8 @@ import { converters } from './db-converters';
 // };
 
 export const fetchCloseData = async (location: LocationArray, distance: number) => {
-    const radius = distance * 1000;
+    const radius = distance;
+    // const radius = distance * 1000;
 
     if (location?.length === 2) {
         const bounds = geohashQueryBounds(location, radius);
