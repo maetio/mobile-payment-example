@@ -15,6 +15,8 @@ interface CartItemParams {
 
 export const Product: React.FC<CartItemParams> = ({ productData }) => {
     const navigation = useNavigation<ProductScreenProps>();
+    console.log("SETH HERE IS THE CURRENT NAVIGATION OBJECT");
+    console.log(navigation.getState());
     // const locateProduct = (id) => {};
     useEffect(() => {
         console.log(productData.id);

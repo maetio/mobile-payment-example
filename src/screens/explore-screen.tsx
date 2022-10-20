@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ActivityIndicator } from 'react-native';
 import { Box, Text, useToast, FlatList, Spinner } from 'native-base';
 import { Product } from 'src/cards/product';
-import { string } from 'yup';
-import { number } from 'yup/lib/locale';
 import { BasicProductDataID } from 'src/types/products';
 import { useFetchProductsQuery } from 'src/services/products-queries';
 import { LastDoc } from 'src/types/last-document';
@@ -14,7 +12,7 @@ import { fetchProducts } from 'src/firebase/products-api';
 
 // All commented out code is for RTK query, however for testing, I used this.
 
-export const ProductsScreen = () => {
+export const ExploreScreen = () => {
     const [products, setProducts] = useState<BasicProductDataID[] | undefined>();
     const [lastPostStatus, setLastPostStatus] = useState(false);
 

@@ -15,7 +15,6 @@ export interface RootParams {
 
 export type RootStackParams = {
     Main: undefined;
-    Product: undefined;
 };
 
 const StackNav = createNativeStackNavigator<RootStackParams>();
@@ -33,7 +32,7 @@ export const RootNavigator: React.FC<RootParams> = ({ scheme }) => {
                     options={{ headerShown: false }}
                 />
                 
-                <StackNav.Screen name="Product" component={ProductStack} />
+                {/* <StackNav.Screen name="Product" component={ProductStack} /> */}
 
                 {/* <StackNav.Screen
                     name="Product"

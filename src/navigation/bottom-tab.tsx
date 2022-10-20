@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import { ExploreScreen } from 'src/screens';
 import { ProfileScreen } from 'src/screens/profile-screen';
 import { MaterialCommunityIcons, MaterialIcons, AntDesign, Entypo } from '@expo/vector-icons';
-import { ProductsScreen } from 'src/screens/products-screen';
+import { ExploreScreen } from 'src/screens/explore-screen';
 import { CartScreen } from 'src/screens/cart-screen';
 import { HomeStackNavigator } from './home-stack';
 import { MapScreen } from 'src/screens/map-screen';
@@ -71,7 +71,7 @@ export const BottomTabNavigator: React.FC<any> = () => {
             /> */}
             <Tabs.Screen
                 name="Explore"
-                component={ProductsScreen}
+                component={ExploreScreen}
                 options={{
                     headerTitle: 'Explore',
                     tabBarIcon: ExploreIcon,
