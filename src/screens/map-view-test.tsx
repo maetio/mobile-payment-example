@@ -4,7 +4,7 @@ import { Box, Slider, FlatList } from 'native-base';
 import MapView, { Marker, Circle } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
-import { LocationArray } from 'src/types/products';
+import { BasicProductDataID, LocationArray } from 'src/types/products';
 import { ActivityIndicator } from 'react-native';
 import { DistanceProducts } from 'src/types/products';
 import { useFetchLocationProductsQuery } from 'src/services/products-queries';
@@ -15,7 +15,7 @@ export const MapViewTest = () => {
     const [location, setLocation] = useState<LocationArray>();
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [inputToRTK, setInputToRTK] = useState<DistanceProducts | undefined>();
-    const [product, setProducts] = useState<BasicProductData[]>();
+    const [product, setProducts] = useState<BasicProductDataID[]>();
     const [distanceLabel, setDistanceLabel] = useState(50);
     const [distance, setDistance] = useState(50);
     const [regionChange, setRegionChange] = useState<any>();

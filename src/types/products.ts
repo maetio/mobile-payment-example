@@ -2,10 +2,14 @@ export interface BasicProductData {
     img: string;
     name: string;
     price: number;
-    id: string;
+    // id: string;
     lat: number;
     long: number;
-    geohash?: string;
+    geohash: string;
+}
+
+export interface BasicProductDataID extends BasicProductData {
+    id: string;
 }
 
 type ImageMap = { [imageName: string]: string };

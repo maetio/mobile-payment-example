@@ -1,5 +1,5 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BasicProductData, DetailedProductData } from 'src/types/products';
+import { BasicProductData, BasicProductDataID, DetailedProductData } from 'src/types/products';
 import { StripeProducts } from 'src/types/stripe-products';
 import { fetchDetailedData, fetchProducts, fetchStripeProducts } from 'src/firebase/products-api';
 import { fetchCloseData } from 'src/firebase/map-api';
@@ -11,7 +11,7 @@ export const productsApi = createApi({
     baseQuery: fakeBaseQuery(),
     tagTypes: ['Product'],
     endpoints: (builder) => ({
-        fetchProducts: builder.query<BasicProductData[], LastDoc | undefined>({
+        fetchProducts: builder.query<BasicProductDataID[], LastDoc | undefined>({
             async queryFn(lastDocID, timeStamp) {
                 // console.log(lastDocID);
                 console.log('from query');
@@ -57,7 +57,7 @@ export const productsApi = createApi({
             providesTags: ['Product'],
         }),
 
-        fetchLocationProducts: builder.query<BasicProductData[], DistanceProducts | undefined>({
+        fetchLocationProducts: builder.query<BasicProductDataID[], DistanceProducts | undefined>({
             async queryFn(obj) {
                 // console.log(lastDocID);
                 console.log('from query');

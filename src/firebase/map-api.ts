@@ -1,7 +1,7 @@
 import { collection, getDocs, query, orderBy, startAt, endAt, limit } from 'firebase/firestore';
 import { geohashQueryBounds, distanceBetween } from 'geofire-common';
 import { db } from './firebase-config';
-import { LocationArray } from 'src/types/products';
+import { BasicProductDataID, LocationArray } from 'src/types/products';
 import { BasicProductData } from 'src/types/products';
 import { converters } from './db-converters';
 
@@ -91,8 +91,10 @@ export const fetchCloseData = async (location: LocationArray, distance: number) 
             const colRef = collection(db, 'basic-product-data').withConverter<BasicProductData>(
                 converters.productData,
             );
-            // const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]), limit(3));
-            const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
+
+            // add switch case that makes query bases off distance/bounds
+            const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]), limit(3));
+            // const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
 
             // const q = query(colRef, orderBy('geohash'));
 
@@ -103,7 +105,7 @@ export const fetchCloseData = async (location: LocationArray, distance: number) 
 
         const thing = await Promise.all(promises);
 
-        const matchingDocs: BasicProductData[] = [];
+        const matchingDocs: BasicProductDataID[] = [];
 
         for (const snap of thing) {
             for (const doc of snap.docs) {

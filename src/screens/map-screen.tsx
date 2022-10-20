@@ -5,7 +5,7 @@ import { geohashForLocation, geohashQueryBounds, distanceBetween } from 'geofire
 import { db } from 'src/firebase/firebase-config';
 import { async } from '@firebase/util';
 import { Product } from 'src/cards/product';
-import { BasicProductData } from 'src/types/products';
+import { BasicProductDataID } from 'src/types/products';
 import { converters } from 'src/firebase/db-converters';
 
 import { fetchCloseData } from 'src/firebase/map-api';
@@ -19,7 +19,7 @@ import { ActivityIndicator } from 'react-native';
 export const MapScreen = () => {
     const [location, setLocation] = useState<LocationArray>();
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
-    const [product, setProducts] = useState<BasicProductData[]>();
+    const [product, setProducts] = useState<BasicProductDataID[]>();
     const [distance, setDistance] = useState<number>(50);
     const [inputToRTK, setInputToRTK] = useState<DistanceProducts | undefined>();
     const [distanceLabel, setDistanceLabel] = useState(50);
