@@ -3,7 +3,6 @@ import React, { useEffect } from 'react';
 import { Flex, Image, Text, Pressable } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { ProductStackParam } from 'src/navigation/product-stack';
 import { BasicProductData, BasicProductDataID, DetailedProductData } from 'src/types/products';
 import { ExploreStackParams } from 'src/navigation/explore-stack';
 
