@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Box, Slider } from 'native-base';
+import { Box, Slider, FlatList } from 'native-base';
 import MapView, { Marker, Circle } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
@@ -9,6 +9,7 @@ import { ActivityIndicator } from 'react-native';
 import { DistanceProducts } from 'src/types/products';
 import { useFetchLocationProductsQuery } from 'src/services/products-queries';
 import { BasicProductData } from 'src/types/products';
+import { Product } from 'src/cards/product';
 
 export const MapViewTest = () => {
     const [location, setLocation] = useState<LocationArray>();
@@ -101,7 +102,7 @@ export const MapViewTest = () => {
                                 latitude: regionChange.latitude,
                                 longitude: regionChange.longitude,
                             }}
-                            radius={regionChange.latitudeDelta* 500 * 110.9472}
+                            radius={regionChange.latitudeDelta * 500 * 110.9472}
                         />
                     )}
                 </MapView>
@@ -137,6 +138,13 @@ export const MapViewTest = () => {
                         6,
                     )}, ${regionChange.longitude.toFixed(6)}`}
             </Text>
+            <FlatList
+                data={product}
+                renderItem={({ item }) => <Product productData={item} key={item.id} />}
+                showsVerticalScrollIndicator={false}
+                onEndReachedThreshold={0.01}
+                scrollEventThrottle={150}
+            />
         </Box>
     );
 };
