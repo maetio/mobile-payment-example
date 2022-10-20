@@ -32,13 +32,13 @@ export const RootNavigator: React.FC<RootParams> = ({ scheme }) => {
                     component={loggedIn ? BottomTabNavigator : AuthStackNavigator}
                     options={{ headerShown: false }}
                 />
-                <StackNav.Screen name="Product" component={ProductStack} />
+                {/* <StackNav.Screen name="Product" component={ProductStack} /> */}
 
-                {/* <StackNav.Screen
+                <StackNav.Screen
                     name="Product"
                     component={ProductViewScreen}
                     options={{ animationTypeForReplace: 'pop' }}
-                /> */}
+                />
             </StackNav.Navigator>
         </NavigationContainer>
     );

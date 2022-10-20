@@ -9,7 +9,7 @@ export interface BasicProductData {
 }
 
 export interface BasicProductDataID extends BasicProductData {
-    id: string;
+    id?: string;
 }
 
 type ImageMap = { [imageName: string]: string };

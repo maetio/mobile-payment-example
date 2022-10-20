@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Flex, Image, Text, Pressable } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
@@ -16,6 +16,9 @@ interface CartItemParams {
 export const Product: React.FC<CartItemParams> = ({ productData }) => {
     const navigation = useNavigation<ProductScreenProps>();
     // const locateProduct = (id) => {};
+    useEffect(() => {
+        console.log(productData.id);
+    }, []);
 
     return (
         <Flex
@@ -33,9 +36,11 @@ export const Product: React.FC<CartItemParams> = ({ productData }) => {
             borderRadius={40}>
             <Pressable
                 onPress={() => {
-                    navigation.navigate('Product', {
-                        id: productData.id,
-                    });
+                    if (productData.id) {
+                        navigation.navigate('Product', {
+                            id: productData.id,
+                        });
+                    }
                 }}
                 // onPress={() => locateProduct(props.id)}
                 flexDirection="row"

@@ -10,8 +10,15 @@ import { DistanceProducts } from 'src/types/products';
 import { useFetchLocationProductsQuery } from 'src/services/products-queries';
 import { BasicProductData } from 'src/types/products';
 import { Product } from 'src/cards/product';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { ProductStackParam } from 'src/navigation/product-stack';
+
+type ProductScreenProps = StackNavigationProp<ProductStackParam, 'Product'>;
 
 export const MapViewTest = () => {
+    const navigation = useNavigation<ProductScreenProps>();
+
     const [location, setLocation] = useState<LocationArray>();
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [inputToRTK, setInputToRTK] = useState<DistanceProducts | undefined>();
@@ -104,6 +111,13 @@ export const MapViewTest = () => {
                         product.map((prod) => {
                             return (
                                 <Marker
+                                    onPress={() => {
+                                        if (prod.id) {
+                                            navigation.navigate('Product', {
+                                                id: prod.id,
+                                            });
+                                        }
+                                    }}
                                     key={prod.id}
                                     title="Event"
                                     pinColor="gold"
