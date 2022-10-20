@@ -95,6 +95,15 @@ export const MapViewTest = () => {
                         center={{ latitude: location[0], longitude: location[1] }}
                         radius={1000 * distance}
                     />
+                    {regionChange && (
+                        <Circle
+                            center={{
+                                latitude: regionChange.latitude,
+                                longitude: regionChange.longitude,
+                            }}
+                            radius={regionChange.latitudeDelta* 500 * 110.9472}
+                        />
+                    )}
                 </MapView>
             ) : (
                 <ActivityIndicator color="#36d7b7" />
@@ -122,8 +131,11 @@ export const MapViewTest = () => {
             <Text>{distanceLabel}Km</Text>
             <Text>{location && `Location on Load, ${location[0]}, ${location[1]}`}</Text>
             <Text>
-                {location && regionChange &&
-                    `Changing Location, ${regionChange.latitude.toFixed(6)}, ${regionChange.longitude.toFixed(6)}`}
+                {location &&
+                    regionChange &&
+                    `Changing Location, ${regionChange.latitude.toFixed(
+                        6,
+                    )}, ${regionChange.longitude.toFixed(6)}`}
             </Text>
         </Box>
     );
