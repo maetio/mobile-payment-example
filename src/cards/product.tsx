@@ -5,16 +5,22 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ProductStackParam } from 'src/navigation/product-stack';
 import { BasicProductData, BasicProductDataID, DetailedProductData } from 'src/types/products';
-
-type ProductScreenProps = StackNavigationProp<ProductStackParam, 'Product'>;
+import { ExploreStackParams } from 'src/navigation/explore-stack';
 
 interface CartItemParams {
     productData: BasicProductDataID;
     // cartData: DetailedProductData;
-}
+};
+
+/*
+    In the future, if you need to access the product item in the "cart" or "map" screen, you will need to change this prop
+    Can use the or to add other navigation props that this could be.
+*/
+type ProductNavProps = StackNavigationProp<ExploreStackParams, "Product">;
 
 export const Product: React.FC<CartItemParams> = ({ productData }) => {
-    const navigation = useNavigation<ProductScreenProps>();
+
+    const navigation = useNavigation<ProductNavProps>();
     console.log("SETH HERE IS THE CURRENT NAVIGATION OBJECT");
     console.log(navigation.getState());
     // const locateProduct = (id) => {};

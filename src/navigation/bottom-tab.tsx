@@ -48,7 +48,7 @@ const MapIcon = ({ focused, color, size }: TabBarIconProps) => (
     <Entypo name={focused ? 'map' : 'map'} color={color} size={size} />
 );
 
-export const BottomTabNavigator: React.FC<any> = () => {
+export const BottomTabNavigator: React.FC<{}> = () => {
     return (
         <Tabs.Navigator>
             <Tabs.Screen

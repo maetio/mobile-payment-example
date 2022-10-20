@@ -11,6 +11,7 @@ import { ScreenParams } from 'src/types/screen';
 import { ProductStackParam } from 'src/navigation/product-stack';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
+import { ExploreStackParams } from 'src/navigation/explore-stack';
 
 // interface routeID {
 //     children: React.ReactNode;
@@ -22,11 +23,10 @@ import { StackScreenProps } from '@react-navigation/stack';
 //     };
 // }
 
-type ProductRouteProp = StackScreenProps<ProductStackParam, 'Product'>;
+type ProductViewParams = StackScreenProps<ExploreStackParams, 'Product'>;
 
-export const ProductViewScreen: React.FC<ProductRouteProp> = (props) => {
-    console.log('props')
-    console.log(props);
+export const ProductViewScreen: React.FC<ProductViewParams> = ({ route }) => {
+
     // const [detailedData, setDetailedData] = useState<Partial<DetailedProductData>>();
     const [detailedData, setDetailedData] = useState<DetailedProductData | null>();
 

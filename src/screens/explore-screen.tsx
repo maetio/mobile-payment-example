@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ActivityIndicator } from 'react-native';
 import { Box, Text, useToast, FlatList, Spinner } from 'native-base';
+import { StackScreenProps } from '@react-navigation/stack';
 import { Product } from 'src/cards/product';
 import { BasicProductDataID } from 'src/types/products';
 import { useFetchProductsQuery } from 'src/services/products-queries';
@@ -8,11 +9,15 @@ import { LastDoc } from 'src/types/last-document';
 
 // new imports
 import { fetchProducts } from 'src/firebase/products-api';
+import { BottomTabParams } from 'src/navigation/bottom-tab';
+import { ExploreStackParams } from 'src/navigation/explore-stack';
 // end newimports
 
 // All commented out code is for RTK query, however for testing, I used this.
 
-export const ExploreScreen: React.FC<{}> = () => {
+type ExploreScreenParams = StackScreenProps<ExploreStackParams, "ExploreProducts">;
+
+export const ExploreScreen: React.FC<ExploreScreenParams> = ({ route }) => {
     const [products, setProducts] = useState<BasicProductDataID[] | undefined>();
     const [lastPostStatus, setLastPostStatus] = useState(false);
 
