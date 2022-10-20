@@ -9,15 +9,19 @@ import {
     startAfter,
     where,
     collectionGroup,
+    startAt,
+    endAt,
 } from 'firebase/firestore';
+import { geohashForLocation, geohashQueryBounds } from 'geofire-common';
 import { db } from 'src/firebase/firebase-config';
-import { BasicProductData, DetailedProductData } from 'src/types/products';
+import { BasicProductData, BasicProductDataID, DetailedProductData } from 'src/types/products';
 import { converters } from './db-converters';
 import {
     StripeProducts,
     StripeProductDetailed,
     StripeProductBasic,
 } from 'src/types/stripe-products';
+
 
 export const fetchProducts = async (lastDocumentID: string | undefined) => {
     const colRef = collection(db, 'basic-product-data').withConverter<BasicProductData>(
@@ -35,7 +39,7 @@ export const fetchProducts = async (lastDocumentID: string | undefined) => {
     // Make sure to change limit back to 3
     const productData = await getDocs(q);
 
-    const prod: BasicProductData[] = [];
+    const prod: BasicProductDataID[] = [];
 
     productData.docs.forEach((doc) => {
         const datas = { ...doc.data(), id: doc.id };
@@ -92,3 +96,4 @@ export const fetchStripeProducts = async () => {
 
     return products;
 };
+

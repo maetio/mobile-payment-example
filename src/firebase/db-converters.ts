@@ -17,6 +17,9 @@ export const converters: { [t: string]: FirestoreDataConverter<any> } = {
                 img: data.img || null,
                 name: data.name || null,
                 price: data.price || null,
+                lat: data.lat || null,
+                long: data.long || null,
+                geohash: data.geohash || null,
             };
             return productData;
         },

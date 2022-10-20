@@ -7,7 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ProductViewScreen } from 'src/screens/product-view-screen';
 import { AuthStackNavigator } from './auth-stack';
 import { BottomTabNavigator } from './bottom-tab';
-// import { ProductStack } from './product-stack';
+import { ProductStack } from './product-stack';
 
 export interface RootParams {
     scheme?: ColorSchemeName; // the color scheme of the app
@@ -15,7 +15,6 @@ export interface RootParams {
 
 export type RootStackParams = {
     Main: undefined;
-    Product: undefined;
 };
 
 const StackNav = createNativeStackNavigator<RootStackParams>();
@@ -31,13 +30,6 @@ export const RootNavigator: React.FC<RootParams> = ({ scheme }) => {
                     name="Main"
                     component={loggedIn ? BottomTabNavigator : AuthStackNavigator}
                     options={{ headerShown: false }}
-                />
-                {/* <StackNav.Screen name="Product" component={ProductStack} /> */}
-
-                <StackNav.Screen
-                    name="Product"
-                    component={ProductViewScreen}
-                    options={{ animationTypeForReplace: 'pop' }}
                 />
             </StackNav.Navigator>
         </NavigationContainer>

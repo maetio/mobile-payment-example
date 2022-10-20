@@ -2,16 +2,20 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import { ExploreScreen } from 'src/screens';
 import { ProfileScreen } from 'src/screens/profile-screen';
-import { MaterialCommunityIcons, MaterialIcons, AntDesign } from '@expo/vector-icons';
-import { ProductsScreen } from 'src/screens/products-screen';
+import { MaterialCommunityIcons, MaterialIcons, AntDesign, Entypo } from '@expo/vector-icons';
 import { CartScreen } from 'src/screens/cart-screen';
 import { HomeStackNavigator } from './home-stack';
+import { MapScreen } from 'src/screens/map-screen';
+import { MapViewTest } from 'src/screens/map-view-test';
+import { ExploreStack } from 'src/navigation/explore-stack';
 
 export type BottomTabParams = {
     HomeTab: undefined;
     Explore: undefined;
     Profile: undefined;
     Cart: undefined;
+    Map: undefined;
+    MapTest: undefined;
 };
 
 const Tabs = createBottomTabNavigator<BottomTabParams>();
@@ -40,7 +44,11 @@ const CartIcon = ({ focused, color, size }: TabBarIconProps) => (
     <AntDesign name={focused ? 'shoppingcart' : 'shoppingcart'} color={color} size={size} />
 );
 
-export const BottomTabNavigator: React.FC<any> = () => {
+const MapIcon = ({ focused, color, size }: TabBarIconProps) => (
+    <Entypo name={focused ? 'map' : 'map'} color={color} size={size} />
+);
+
+export const BottomTabNavigator: React.FC<{}> = () => {
     return (
         <Tabs.Navigator>
             <Tabs.Screen
@@ -63,7 +71,7 @@ export const BottomTabNavigator: React.FC<any> = () => {
             /> */}
             <Tabs.Screen
                 name="Explore"
-                component={ProductsScreen}
+                component={ExploreStack}
                 options={{
                     headerTitle: 'Explore',
                     tabBarIcon: ExploreIcon,
@@ -76,6 +84,22 @@ export const BottomTabNavigator: React.FC<any> = () => {
                 options={{
                     headerTitle: 'Cart',
                     tabBarIcon: CartIcon,
+                }}
+            />
+            <Tabs.Screen
+                name="Map"
+                component={MapScreen}
+                options={{
+                    headerTitle: 'Map',
+                    tabBarIcon: MapIcon,
+                }}
+            />
+            <Tabs.Screen
+                name="MapTest"
+                component={MapViewTest}
+                options={{
+                    headerTitle: 'MapTest',
+                    tabBarIcon: MapIcon,
                 }}
             />
 
