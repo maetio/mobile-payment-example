@@ -2,6 +2,13 @@ export interface BasicProductData {
     img: string;
     name: string;
     price: number;
+    // id: string;
+    lat: number;
+    long: number;
+    geohash: string;
+}
+
+export interface BasicProductDataID extends BasicProductData {
     id?: string;
 }
 
@@ -20,4 +27,11 @@ export interface DetailedProductData {
         | undefined;
     desc?: string | undefined;
     qty?: number | undefined;
+}
+
+export type LocationArray = [number, number];
+
+export interface DistanceProducts {
+    loc: LocationArray | undefined;
+    dis: number;
 }
