@@ -12,7 +12,7 @@ import { fetchProducts } from 'src/firebase/products-api';
 
 // All commented out code is for RTK query, however for testing, I used this.
 
-export const ExploreScreen = () => {
+export const ExploreScreen: React.FC<{}> = () => {
     const [products, setProducts] = useState<BasicProductDataID[] | undefined>();
     const [lastPostStatus, setLastPostStatus] = useState(false);
 

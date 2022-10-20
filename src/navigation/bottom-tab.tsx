@@ -3,11 +3,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import { ExploreScreen } from 'src/screens';
 import { ProfileScreen } from 'src/screens/profile-screen';
 import { MaterialCommunityIcons, MaterialIcons, AntDesign, Entypo } from '@expo/vector-icons';
-import { ExploreScreen } from 'src/screens/explore-screen';
 import { CartScreen } from 'src/screens/cart-screen';
 import { HomeStackNavigator } from './home-stack';
 import { MapScreen } from 'src/screens/map-screen';
 import { MapViewTest } from 'src/screens/map-view-test';
+import { ExploreStack } from 'src/navigation/explore-stack';
 
 export type BottomTabParams = {
     HomeTab: undefined;
@@ -71,7 +71,7 @@ export const BottomTabNavigator: React.FC<any> = () => {
             /> */}
             <Tabs.Screen
                 name="Explore"
-                component={ExploreScreen}
+                component={ExploreStack}
                 options={{
                     headerTitle: 'Explore',
                     tabBarIcon: ExploreIcon,
