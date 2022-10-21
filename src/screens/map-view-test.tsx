@@ -109,7 +109,9 @@ export const MapViewTest = () => {
                 <MapView
                     style={styles.map}
                     onRegionChangeComplete={(e) => {
-                        // console.log(e);
+                        console.log('e');
+                        console.log(e);
+                        // setLocation([e.latitude, e.longitude]);
                         setRegionChange(e);
                     }}
                     initialRegion={{
@@ -117,7 +119,15 @@ export const MapViewTest = () => {
                         longitude: location[1],
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
-                    }}>
+                    }}
+
+                    // region={{
+                    //     latitude: location[0],
+                    //     longitude: location[1],
+                    //     latitudeDelta: 0.0922,
+                    //     longitudeDelta: 0.0421,
+                    // }}
+                >
                     <Marker
                         title="You Are Here"
                         coordinate={{ latitude: location[0], longitude: location[1] }}></Marker>
@@ -210,7 +220,19 @@ export const MapViewTest = () => {
                 onPress={(data, details = null) => {
                     // console.log(data);
                     console.log('details');
-                    console.log(details);
+                    console.log(details?.geometry.location);
+                    if (details) {
+                        const inputLocation: LocationArray = [
+                            details?.geometry.location.lat,
+                            details?.geometry.location.lng,
+                        ];
+
+                        setLocation(inputLocation);
+                        // setInputToRTK({
+                        //     loc: inputLocation,
+                        //     dis: 50,
+                        // });
+                    }
                 }}
                 fetchDetails={true}
                 onFail={(error) => console.error(error)}
