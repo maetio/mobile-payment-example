@@ -26,7 +26,6 @@ import { ExploreStackParams } from 'src/navigation/explore-stack';
 type ProductViewParams = StackScreenProps<ExploreStackParams, 'Product'>;
 
 export const ProductViewScreen: React.FC<ProductViewParams> = ({ route }) => {
-
     // const [detailedData, setDetailedData] = useState<Partial<DetailedProductData>>();
     const [detailedData, setDetailedData] = useState<DetailedProductData | null>();
 
