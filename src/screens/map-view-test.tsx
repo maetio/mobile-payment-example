@@ -104,7 +104,7 @@ export const MapViewTest = () => {
     // END of NEW way
 
     return (
-        <Box style={styles.container}>
+        <Box style={styles.container} flex={1} alignItems="center">
             {location ? (
                 <MapView
                     style={styles.map}
@@ -188,25 +188,28 @@ export const MapViewTest = () => {
                         6,
                     )}, ${regionChange.longitude.toFixed(6)}`}
             </Text>
-            <Box style={styles.containerz}>
-                <GooglePlacesAutocomplete
-                    styles={{
-                        container: {
-                            flex: 0,
-                        },
-                        textInput: {
-                            fontSize: 18,
-                        },
-                    }}
-                    placeholder="Search fsd afds fdas"
-                    onPress={(data, details = null) => console.log(data)}
-                    onFail={(error) => console.error(error)}
-                    query={{
-                        key: GOOGLE_API_KEY,
-                        language: 'en',
-                    }}
-                />
-            </Box>
+
+            <GooglePlacesAutocomplete
+                styles={{
+                    container: {
+                        flex: 0,
+                        width: '100%',
+                    },
+                    textInput: {
+                        fontSize: 18,
+                    },
+                }}
+                placeholder="Search Bar"
+                nearbyPlacesAPI="GooglePlacesSearch"
+                debounce={400}
+                onPress={(data, details = null) => console.log(data)}
+                onFail={(error) => console.error(error)}
+                query={{
+                    key: GOOGLE_API_KEY,
+                    language: 'en',
+                }}
+            />
+
             <FlatList
                 data={product}
                 renderItem={({ item }) => <Product productData={item} key={item.id} />}
@@ -220,9 +223,9 @@ export const MapViewTest = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
         backgroundColor: '#fff',
-        alignItems: 'center',
+        // alignItems: 'center',
         // justifyContent: 'center',
     },
     map: {
@@ -231,7 +234,8 @@ const styles = StyleSheet.create({
         height: '50%',
     },
     containerz: {
-        padding: 10,
+        // padding: 10,
+        // alignSelf: 'flex-start',
         backgroundColor: '#ecf0f1',
     },
 });

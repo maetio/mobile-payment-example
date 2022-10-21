@@ -16,14 +16,14 @@ export const GooglePlacesInput = () => {
     console.log(GOOGLE_API_KEY);
     return (
         <GooglePlacesAutocomplete
-            // styles={{
-            //     container: {
-            //         flex: 0,
-            //     },
-            //     textInput: {
-            //         fontSize: 18,
-            //     },
-            // }}
+            styles={{
+                container: {
+                    flex: 0,
+                },
+                textInput: {
+                    fontSize: 18,
+                },
+            }}
 
             placeholder="Search fsd afds fdas"
             onPress={(data, details = null) => {
