@@ -199,10 +199,20 @@ export const MapViewTest = () => {
                         fontSize: 18,
                     },
                 }}
+                textInputProps={{
+                    returnKeyType: 'string',
+                }}
+                minLength={2}
+                enablePoweredByContainer={false}
                 placeholder="Search Bar"
                 nearbyPlacesAPI="GooglePlacesSearch"
                 debounce={400}
-                onPress={(data, details = null) => console.log(data)}
+                onPress={(data, details = null) => {
+                    // console.log(data);
+                    console.log('details');
+                    console.log(details);
+                }}
+                fetchDetails={true}
                 onFail={(error) => console.error(error)}
                 query={{
                     key: GOOGLE_API_KEY,
