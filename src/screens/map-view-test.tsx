@@ -14,6 +14,19 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ProductStackParam } from 'src/navigation/product-stack';
 
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+
+import {
+    FIREBASE_API_KEY,
+    FIREBASE_AUTH_DOMAIN,
+    FIREBASE_PROJECT_ID,
+    FIREBASE_STORAGE_BUCKET,
+    FIREBASE_MESSAGING_SENDER_ID,
+    FIREBASE_APP_ID,
+    FIREBASE_MEASUREMENT_ID,
+    GOOGLE_API_KEY,
+} from '@env';
+
 type ProductScreenProps = StackNavigationProp<ProductStackParam, 'Product'>;
 
 export const MapViewTest = () => {
@@ -83,6 +96,7 @@ export const MapViewTest = () => {
             };
 
             console.log(datas);
+
             setInputToRTK(datas);
         }
     }, [regionChange]);
@@ -164,6 +178,7 @@ export const MapViewTest = () => {
                 </Slider.Track>
                 <Slider.Thumb />
             </Slider>
+
             <Text>{distanceLabel}Km</Text>
             <Text>{location && `Location on Load, ${location[0]}, ${location[1]}`}</Text>
             <Text>
@@ -173,6 +188,25 @@ export const MapViewTest = () => {
                         6,
                     )}, ${regionChange.longitude.toFixed(6)}`}
             </Text>
+            <Box style={styles.containerz}>
+                <GooglePlacesAutocomplete
+                    styles={{
+                        container: {
+                            flex: 0,
+                        },
+                        textInput: {
+                            fontSize: 18,
+                        },
+                    }}
+                    placeholder="Search fsd afds fdas"
+                    onPress={(data, details = null) => console.log(data)}
+                    onFail={(error) => console.error(error)}
+                    query={{
+                        key: GOOGLE_API_KEY,
+                        language: 'en',
+                    }}
+                />
+            </Box>
             <FlatList
                 data={product}
                 renderItem={({ item }) => <Product productData={item} key={item.id} />}
@@ -195,5 +229,9 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width,
         // height: Dimensions.get('window').height,
         height: '50%',
+    },
+    containerz: {
+        padding: 10,
+        backgroundColor: '#ecf0f1',
     },
 });

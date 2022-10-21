@@ -50,7 +50,7 @@ const MapIcon = ({ focused, color, size }: TabBarIconProps) => (
 
 export const BottomTabNavigator: React.FC<{}> = () => {
     return (
-        <Tabs.Navigator>
+        <Tabs.Navigator screenOptions={{ tabBarHideOnKeyboard: true }}>
             <Tabs.Screen
                 name="HomeTab"
                 component={HomeStackNavigator}
