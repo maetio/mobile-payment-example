@@ -30,9 +30,12 @@ import {
 type ProductScreenProps = StackNavigationProp<ProductStackParam, 'Product'>;
 
 export const MapViewTest = () => {
+
+    console.log(GOOGLE_API_KEY)
     const navigation = useNavigation<ProductScreenProps>();
 
-    const [location, setLocation] = useState<LocationArray>();
+    const [initialLocation, setInitialLocation] = useState<LocationArray>();
+    const [locationChange, setLocationChange] = useState<any>();
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [inputToRTK, setInputToRTK] = useState<DistanceProducts | undefined>();
     const [product, setProducts] = useState<BasicProductDataID[]>();
@@ -56,7 +59,7 @@ export const MapViewTest = () => {
             // console.log(location.coords.latitude);
             const loxz: LocationArray = [locationz.coords.latitude, locationz.coords.longitude];
 
-            setLocation(loxz);
+            setInitialLocation(loxz);
 
             // const datas = {
             //     loc: loxz,
@@ -97,6 +100,8 @@ export const MapViewTest = () => {
 
             console.log(datas);
 
+            setInitialLocation(locx);
+
             setInputToRTK(datas);
         }
     }, [regionChange]);
@@ -105,7 +110,7 @@ export const MapViewTest = () => {
 
     return (
         <Box style={styles.container} flex={1} alignItems="center">
-            {location ? (
+            {initialLocation ? (
                 <MapView
                     style={styles.map}
                     onRegionChangeComplete={(e) => {
@@ -115,22 +120,21 @@ export const MapViewTest = () => {
                         setRegionChange(e);
                     }}
                     initialRegion={{
-                        latitude: location[0],
-                        longitude: location[1],
+                        latitude: initialLocation[0],
+                        longitude: initialLocation[1],
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
                     }}
-
                     // region={{
                     //     latitude: location[0],
                     //     longitude: location[1],
                     //     latitudeDelta: 0.0922,
                     //     longitudeDelta: 0.0421,
                     // }}
-                >
+                    >
                     <Marker
                         title="You Are Here"
-                        coordinate={{ latitude: location[0], longitude: location[1] }}></Marker>
+                        coordinate={{ latitude: initialLocation[0], longitude: initialLocation[1] }}></Marker>
                     {product &&
                         product.map((prod) => {
                             return (
@@ -152,7 +156,7 @@ export const MapViewTest = () => {
                             );
                         })}
                     <Circle
-                        center={{ latitude: location[0], longitude: location[1] }}
+                        center={{ latitude: initialLocation[0], longitude: initialLocation[1] }}
                         radius={1000 * distance}
                     />
                     {regionChange && (
@@ -190,9 +194,9 @@ export const MapViewTest = () => {
             </Slider>
 
             <Text>{distanceLabel}Km</Text>
-            <Text>{location && `Location on Load, ${location[0]}, ${location[1]}`}</Text>
+            <Text>{initialLocation && `Location on Load, ${initialLocation[0]}, ${initialLocation[1]}`}</Text>
             <Text>
-                {location &&
+                {initialLocation &&
                     regionChange &&
                     `Changing Location, ${regionChange.latitude.toFixed(
                         6,
@@ -227,7 +231,8 @@ export const MapViewTest = () => {
                             details?.geometry.location.lng,
                         ];
 
-                        setLocation(inputLocation);
+                        setInitialLocation(inputLocation);
+                        // setLocationChange(inputLocation);
                         // setInputToRTK({
                         //     loc: inputLocation,
                         //     dis: 50,
