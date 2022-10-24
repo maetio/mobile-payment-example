@@ -23,16 +23,14 @@ type ProductScreenProps = StackNavigationProp<ProductStackParam, 'Product'>;
 export const MapViewTest = () => {
     const navigation = useNavigation<ProductScreenProps>();
 
-    const mapRef: null | any  = useRef(null);
+    const mapRef: null | any = useRef(null);
 
     const [initialLocation, setInitialLocation] = useState<LocationArray>();
     const [currentLocation, setCurrentLocation] = useState<any>();
-    const [locationChange, setLocationChange] = useState<any>();
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [inputToRTK, setInputToRTK] = useState<DistanceProducts | undefined>();
     const [product, setProducts] = useState<BasicProductDataID[]>();
-
-    const [distanceLabel, setDistanceLabel] = useState(50);
+    // const [distanceLabel, setDistanceLabel] = useState(50);
     const [distance, setDistance] = useState(50);
 
     const [regionChange, setRegionChange] = useState<any>();
@@ -61,20 +59,11 @@ export const MapViewTest = () => {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
             });
-
-            // const datas = {
-            //     loc: loxz,
-            //     dis: distance,
-            //     // dis: 1000,
-            // };
-            // setInputToRTK(datas);
         })();
     }, []);
 
     useEffect(() => {
-        // getPost();
         setProducts(data);
-        // console.log(product);
     }, [data]);
 
     // for using slider
@@ -115,20 +104,12 @@ export const MapViewTest = () => {
 
     // END of NEW way
 
-    // const goToLocation = () => {
-    //     mapRef?.current.animateToRegion({ currentLocation });
-    // };
-
     return (
         <Box style={styles.container} flex={1} alignItems="center">
             {initialLocation && currentLocation ? (
                 <MapView
                     ref={mapRef}
                     style={styles.map}
-                    // onRegionChange={(e) => {
-                    //     console.log(e);
-                    //     setCurrentLocation(e);
-                    // }}
                     onRegionChangeComplete={(e) => {
                         console.log('e');
                         console.log(e);
@@ -142,9 +123,7 @@ export const MapViewTest = () => {
                         longitude: initialLocation[1],
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
-                    }}
-                    // region={currentLocation}
-                >
+                    }}>
                     <Marker
                         title="You Are Here"
                         coordinate={{
@@ -209,15 +188,15 @@ export const MapViewTest = () => {
                 <Slider.Thumb />
             </Slider> */}
 
-            <Text>{distanceLabel}Km</Text>
+            {/* <Text>{distanceLabel}Km</Text> */}
             <Text>
                 {initialLocation && `Your Location, ${initialLocation[0]}, ${initialLocation[1]}`}
             </Text>
             <Text>
-                {currentLocation &&
-                    `Map Location, ${currentLocation.latitude.toFixed(
+                {regionChange &&
+                    `Map Location, ${regionChange.latitude.toFixed(
                         6,
-                    )}, ${currentLocation.longitude.toFixed(6)}`}
+                    )}, ${regionChange.longitude.toFixed(6)}`}
             </Text>
 
             <GooglePlacesAutocomplete
@@ -254,13 +233,6 @@ export const MapViewTest = () => {
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421,
                         });
-
-                        // setInitialLocation(inputLocation);
-                        // setLocationChange(inputLocation);
-                        // setInputToRTK({
-                        //     loc: inputLocation,
-                        //     dis: 50,
-                        // });
                     }
                 }}
                 fetchDetails={true}
