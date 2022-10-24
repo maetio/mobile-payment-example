@@ -113,8 +113,6 @@ export const MapViewTest = () => {
                     onRegionChangeComplete={(e) => {
                         console.log('e');
                         console.log(e);
-                        // setLocation([e.latitude, e.longitude]);
-                        // setCurrentLocation(e);
 
                         setRegionChange(e);
                     }}
@@ -218,14 +216,8 @@ export const MapViewTest = () => {
                 nearbyPlacesAPI="GooglePlacesSearch"
                 debounce={400}
                 onPress={(data, details = null) => {
-                    // console.log(data);
-                    console.log('details');
-                    console.log(details?.geometry.location);
+                    
                     if (details) {
-                        const inputLocation: LocationArray = [
-                            details?.geometry.location.lat,
-                            details?.geometry.location.lng,
-                        ];
 
                         setCurrentLocation({
                             latitude: details?.geometry.location.lat,
