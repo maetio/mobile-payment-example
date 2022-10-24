@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Box, Slider, FlatList } from 'native-base';
 import MapView, { Marker, Circle } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
@@ -22,6 +22,8 @@ type ProductScreenProps = StackNavigationProp<ProductStackParam, 'Product'>;
 
 export const MapViewTest = () => {
     const navigation = useNavigation<ProductScreenProps>();
+
+    const mapRef = useRef(null);
 
     const [initialLocation, setInitialLocation] = useState<LocationArray>();
     const [currentLocation, setCurrentLocation] = useState<any>();
@@ -105,16 +107,23 @@ export const MapViewTest = () => {
         }
     }, [regionChange]);
 
+    useEffect(() => {
+        if (currentLocation) {
+            mapRef.current.animateToRegion(currentLocation);
+        }
+    }, [currentLocation]);
+
     // END of NEW way
 
-
-
-    
+    const goToLocation = () => {
+        mapRef?.current.animateToRegion({ currentLocation });
+    };
 
     return (
         <Box style={styles.container} flex={1} alignItems="center">
             {initialLocation && currentLocation ? (
                 <MapView
+                    ref={mapRef}
                     style={styles.map}
                     // onRegionChange={(e) => {
                     //     console.log(e);
@@ -124,7 +133,7 @@ export const MapViewTest = () => {
                         console.log('e');
                         console.log(e);
                         // setLocation([e.latitude, e.longitude]);
-                        setCurrentLocation(e);
+                        // setCurrentLocation(e);
 
                         setRegionChange(e);
                     }}
@@ -134,7 +143,8 @@ export const MapViewTest = () => {
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
                     }}
-                    region={currentLocation}>
+                    // region={currentLocation}
+                >
                     <Marker
                         title="You Are Here"
                         coordinate={{
