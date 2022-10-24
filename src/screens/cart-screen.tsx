@@ -6,14 +6,12 @@ import { useAppSelector } from 'src/hooks/useful-ducks';
 import { db } from 'src/firebase/firebase-config';
 import { loadStripe } from '@stripe/stripe-js';
 import { collection, addDoc, onSnapshot, DocumentData, DocumentSnapshot } from 'firebase/firestore';
-import { string } from 'yup';
+import { StackScreenProps } from '@react-navigation/stack';
+import { CartStackParams } from 'src/navigation/cart-stack';
 
-interface Data {
-    error: any;
-    url: string;
-}
+type CartScreenParams = StackScreenProps<CartStackParams, 'CartProducts'>;
 
-export const CartScreen = () => {
+export const CartScreen: React.FC<CartScreenParams> = ({ route }) => {
     const [loading, setLoading] = useState(false);
 
     const cart = useAppSelector((state) => state.cart);

@@ -93,8 +93,8 @@ export const fetchCloseData = async (location: LocationArray, distance: number) 
             );
 
             // add switch case that makes query bases off distance/bounds
-            const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]), limit(3));
-            // const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
+            // const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]), limit(3));
+            const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
 
             // const q = query(colRef, orderBy('geohash'));
 

@@ -11,16 +11,18 @@ import { useFetchLocationProductsQuery } from 'src/services/products-queries';
 import { Product } from 'src/cards/product';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { ProductStackParam } from 'src/navigation/product-stack';
+// import { ProductStackParam } from 'src/navigation/product-stack';
 import { Region } from 'react-native-maps';
+import { MapStackParams } from 'src/navigation/map-stack';
 
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 import { GOOGLE_API_KEY } from '@env';
 
-type ProductScreenProps = StackNavigationProp<ProductStackParam, 'Product'>;
+// type ProductScreenProps = StackNavigationProp<ProductStackParam, 'Product'>;
+type ProductScreenProps = StackNavigationProp<MapStackParams, 'MapExploreProducts'>;
 
-export const MapViewTest = () => {
+export const MapViewScreen = () => {
     const navigation = useNavigation<ProductScreenProps>();
 
     const mapRef = useRef<MapView | null>(null);
@@ -216,9 +218,7 @@ export const MapViewTest = () => {
                 nearbyPlacesAPI="GooglePlacesSearch"
                 debounce={400}
                 onPress={(data, details = null) => {
-                    
                     if (details) {
-
                         setCurrentLocation({
                             latitude: details?.geometry.location.lat,
                             longitude: details?.geometry.location.lng,

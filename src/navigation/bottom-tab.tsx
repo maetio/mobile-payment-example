@@ -6,8 +6,12 @@ import { MaterialCommunityIcons, MaterialIcons, AntDesign, Entypo } from '@expo/
 import { CartScreen } from 'src/screens/cart-screen';
 import { HomeStackNavigator } from './home-stack';
 import { MapScreen } from 'src/screens/map-screen';
-import { MapViewTest } from 'src/screens/map-view-test';
+
 import { ExploreStack } from 'src/navigation/explore-stack';
+import { MapViewScreen } from 'src/screens/map-view-screen';
+
+import { MapStack } from 'src/navigation/map-stack';
+import { CartStack } from 'src/navigation/cart-stack';
 
 export type BottomTabParams = {
     HomeTab: undefined;
@@ -80,23 +84,23 @@ export const BottomTabNavigator: React.FC<{}> = () => {
 
             <Tabs.Screen
                 name="Cart"
-                component={CartScreen}
+                component={CartStack}
                 options={{
                     headerTitle: 'Cart',
                     tabBarIcon: CartIcon,
                 }}
             />
-            <Tabs.Screen
+            {/* <Tabs.Screen
                 name="Map"
                 component={MapScreen}
                 options={{
                     headerTitle: 'Map',
                     tabBarIcon: MapIcon,
                 }}
-            />
+            /> */}
             <Tabs.Screen
                 name="MapTest"
-                component={MapViewTest}
+                component={MapStack}
                 options={{
                     headerTitle: 'MapTest',
                     tabBarIcon: MapIcon,
