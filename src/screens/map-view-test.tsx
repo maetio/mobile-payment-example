@@ -16,31 +16,23 @@ import { ProductStackParam } from 'src/navigation/product-stack';
 
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
-import {
-    FIREBASE_API_KEY,
-    FIREBASE_AUTH_DOMAIN,
-    FIREBASE_PROJECT_ID,
-    FIREBASE_STORAGE_BUCKET,
-    FIREBASE_MESSAGING_SENDER_ID,
-    FIREBASE_APP_ID,
-    FIREBASE_MEASUREMENT_ID,
-    GOOGLE_API_KEY,
-} from '@env';
+import { GOOGLE_API_KEY } from '@env';
 
 type ProductScreenProps = StackNavigationProp<ProductStackParam, 'Product'>;
 
 export const MapViewTest = () => {
-
-    console.log(GOOGLE_API_KEY)
     const navigation = useNavigation<ProductScreenProps>();
 
     const [initialLocation, setInitialLocation] = useState<LocationArray>();
+    const [currentLocation, setCurrentLocation] = useState<any>();
     const [locationChange, setLocationChange] = useState<any>();
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [inputToRTK, setInputToRTK] = useState<DistanceProducts | undefined>();
     const [product, setProducts] = useState<BasicProductDataID[]>();
+
     const [distanceLabel, setDistanceLabel] = useState(50);
     const [distance, setDistance] = useState(50);
+
     const [regionChange, setRegionChange] = useState<any>();
 
     const { data, isFetching, isLoading, isError, error, isSuccess, refetch } =
@@ -60,6 +52,13 @@ export const MapViewTest = () => {
             const loxz: LocationArray = [locationz.coords.latitude, locationz.coords.longitude];
 
             setInitialLocation(loxz);
+
+            setCurrentLocation({
+                latitude: locationz.coords.latitude,
+                longitude: locationz.coords.longitude,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+            });
 
             // const datas = {
             //     loc: loxz,
@@ -100,7 +99,7 @@ export const MapViewTest = () => {
 
             console.log(datas);
 
-            setInitialLocation(locx);
+            // setInitialLocation(locx);
 
             setInputToRTK(datas);
         }
@@ -108,15 +107,25 @@ export const MapViewTest = () => {
 
     // END of NEW way
 
+
+
+    
+
     return (
         <Box style={styles.container} flex={1} alignItems="center">
-            {initialLocation ? (
+            {initialLocation && currentLocation ? (
                 <MapView
                     style={styles.map}
+                    // onRegionChange={(e) => {
+                    //     console.log(e);
+                    //     setCurrentLocation(e);
+                    // }}
                     onRegionChangeComplete={(e) => {
                         console.log('e');
                         console.log(e);
                         // setLocation([e.latitude, e.longitude]);
+                        setCurrentLocation(e);
+
                         setRegionChange(e);
                     }}
                     initialRegion={{
@@ -125,16 +134,13 @@ export const MapViewTest = () => {
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
                     }}
-                    // region={{
-                    //     latitude: location[0],
-                    //     longitude: location[1],
-                    //     latitudeDelta: 0.0922,
-                    //     longitudeDelta: 0.0421,
-                    // }}
-                    >
+                    region={currentLocation}>
                     <Marker
                         title="You Are Here"
-                        coordinate={{ latitude: initialLocation[0], longitude: initialLocation[1] }}></Marker>
+                        coordinate={{
+                            latitude: initialLocation[0],
+                            longitude: initialLocation[1],
+                        }}></Marker>
                     {product &&
                         product.map((prod) => {
                             return (
@@ -172,7 +178,7 @@ export const MapViewTest = () => {
             ) : (
                 <ActivityIndicator color="#36d7b7" />
             )}
-
+            {/* 
             <Slider
                 w="3/4"
                 maxW="300"
@@ -191,16 +197,17 @@ export const MapViewTest = () => {
                     <Slider.FilledTrack />
                 </Slider.Track>
                 <Slider.Thumb />
-            </Slider>
+            </Slider> */}
 
             <Text>{distanceLabel}Km</Text>
-            <Text>{initialLocation && `Location on Load, ${initialLocation[0]}, ${initialLocation[1]}`}</Text>
             <Text>
-                {initialLocation &&
-                    regionChange &&
-                    `Changing Location, ${regionChange.latitude.toFixed(
+                {initialLocation && `Your Location, ${initialLocation[0]}, ${initialLocation[1]}`}
+            </Text>
+            <Text>
+                {currentLocation &&
+                    `Map Location, ${currentLocation.latitude.toFixed(
                         6,
-                    )}, ${regionChange.longitude.toFixed(6)}`}
+                    )}, ${currentLocation.longitude.toFixed(6)}`}
             </Text>
 
             <GooglePlacesAutocomplete
@@ -231,7 +238,14 @@ export const MapViewTest = () => {
                             details?.geometry.location.lng,
                         ];
 
-                        setInitialLocation(inputLocation);
+                        setCurrentLocation({
+                            latitude: details?.geometry.location.lat,
+                            longitude: details?.geometry.location.lng,
+                            latitudeDelta: 0.0922,
+                            longitudeDelta: 0.0421,
+                        });
+
+                        // setInitialLocation(inputLocation);
                         // setLocationChange(inputLocation);
                         // setInputToRTK({
                         //     loc: inputLocation,
