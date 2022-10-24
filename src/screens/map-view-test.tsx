@@ -8,11 +8,11 @@ import { BasicProductDataID, LocationArray } from 'src/types/products';
 import { ActivityIndicator } from 'react-native';
 import { DistanceProducts } from 'src/types/products';
 import { useFetchLocationProductsQuery } from 'src/services/products-queries';
-import { BasicProductData } from 'src/types/products';
 import { Product } from 'src/cards/product';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ProductStackParam } from 'src/navigation/product-stack';
+import { Region } from 'react-native-maps';
 
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
@@ -23,17 +23,17 @@ type ProductScreenProps = StackNavigationProp<ProductStackParam, 'Product'>;
 export const MapViewTest = () => {
     const navigation = useNavigation<ProductScreenProps>();
 
-    const mapRef: null | any = useRef(null);
+    const mapRef = useRef<MapView | null>(null);
 
     const [initialLocation, setInitialLocation] = useState<LocationArray>();
-    const [currentLocation, setCurrentLocation] = useState<any>();
+    const [currentLocation, setCurrentLocation] = useState<Region>();
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [inputToRTK, setInputToRTK] = useState<DistanceProducts | undefined>();
     const [product, setProducts] = useState<BasicProductDataID[]>();
     // const [distanceLabel, setDistanceLabel] = useState(50);
     const [distance, setDistance] = useState(50);
 
-    const [regionChange, setRegionChange] = useState<any>();
+    const [regionChange, setRegionChange] = useState<Region>();
 
     const { data, isFetching, isLoading, isError, error, isSuccess, refetch } =
         useFetchLocationProductsQuery(inputToRTK);
@@ -98,7 +98,7 @@ export const MapViewTest = () => {
 
     useEffect(() => {
         if (currentLocation) {
-            mapRef?.current?.animateToRegion(currentLocation);
+            mapRef.current?.animateToRegion(currentLocation);
         }
     }, [currentLocation]);
 
@@ -254,6 +254,8 @@ export const MapViewTest = () => {
     );
 };
 
+// Styles
+
 const styles = StyleSheet.create({
     container: {
         // flex: 1,
@@ -272,3 +274,5 @@ const styles = StyleSheet.create({
         backgroundColor: '#ecf0f1',
     },
 });
+
+// End of styles
