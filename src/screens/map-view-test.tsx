@@ -23,7 +23,7 @@ type ProductScreenProps = StackNavigationProp<ProductStackParam, 'Product'>;
 export const MapViewTest = () => {
     const navigation = useNavigation<ProductScreenProps>();
 
-    const mapRef = useRef(null);
+    const mapRef: null | any  = useRef(null);
 
     const [initialLocation, setInitialLocation] = useState<LocationArray>();
     const [currentLocation, setCurrentLocation] = useState<any>();
@@ -109,15 +109,15 @@ export const MapViewTest = () => {
 
     useEffect(() => {
         if (currentLocation) {
-            mapRef.current.animateToRegion(currentLocation);
+            mapRef?.current?.animateToRegion(currentLocation);
         }
     }, [currentLocation]);
 
     // END of NEW way
 
-    const goToLocation = () => {
-        mapRef?.current.animateToRegion({ currentLocation });
-    };
+    // const goToLocation = () => {
+    //     mapRef?.current.animateToRegion({ currentLocation });
+    // };
 
     return (
         <Box style={styles.container} flex={1} alignItems="center">
