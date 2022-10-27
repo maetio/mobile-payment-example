@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { Box, Slider, FlatList } from 'native-base';
-import MapView, { Marker, Circle } from 'react-native-maps';
+import MapView, { Marker, Circle, LatLng } from 'react-native-maps';
+import { Geopoint } from 'geofire-common';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
-import { BasicProductDataID, LocationArray } from 'src/types/products';
+import { BasicProductDataID } from 'src/types/products';
 import { ActivityIndicator } from 'react-native';
 import { DistanceProducts } from 'src/types/products';
 import { useFetchLocationProductsQuery } from 'src/services/products-queries';
@@ -27,10 +28,12 @@ export const MapViewScreen = () => {
 
     const mapRef = useRef<MapView | null>(null);
 
-    const [initialLocation, setInitialLocation] = useState<LocationArray>();
+    // const [initialLocation, setInitialLocation] = useState<Geopoint | undefined>();
+    const [initialLocation, setInitialLocation] = useState<LatLng | undefined>();
+
     const [currentLocation, setCurrentLocation] = useState<Region>();
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
-    const [inputToRTK, setInputToRTK] = useState<DistanceProducts | undefined>();
+    const [inputToRTK, setInputToRTK] = useState<DistanceProducts>();
     const [product, setProducts] = useState<BasicProductDataID[]>();
     // const [distanceLabel, setDistanceLabel] = useState(50);
     const [distance, setDistance] = useState(50);
@@ -51,9 +54,12 @@ export const MapViewScreen = () => {
             let locationz = await Location.getCurrentPositionAsync({});
 
             // console.log(location.coords.latitude);
-            const loxz: LocationArray = [locationz.coords.latitude, locationz.coords.longitude];
+            // const loxz: Geopoint = [locationz.coords.latitude, locationz.coords.longitude];
 
-            setInitialLocation(loxz);
+            setInitialLocation({
+                latitude: locationz.coords.latitude,
+                longitude: locationz.coords.longitude,
+            });
 
             setCurrentLocation({
                 latitude: locationz.coords.latitude,
@@ -84,9 +90,9 @@ export const MapViewScreen = () => {
 
     useEffect(() => {
         if (regionChange) {
-            const locx: LocationArray = [regionChange.latitude, regionChange.longitude];
+            const locGeopoint: Geopoint = [regionChange.latitude, regionChange.longitude];
             const datas = {
-                loc: locx,
+                loc: locGeopoint,
                 dis: regionChange.latitudeDelta * 500 * 110.9472,
             };
 
@@ -119,16 +125,16 @@ export const MapViewScreen = () => {
                         setRegionChange(e);
                     }}
                     initialRegion={{
-                        latitude: initialLocation[0],
-                        longitude: initialLocation[1],
+                        latitude: initialLocation.latitude,
+                        longitude: initialLocation.longitude,
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
                     }}>
                     <Marker
                         title="You Are Here"
                         coordinate={{
-                            latitude: initialLocation[0],
-                            longitude: initialLocation[1],
+                            latitude: initialLocation.latitude,
+                            longitude: initialLocation.longitude,
                         }}></Marker>
                     {product &&
                         product.map((prod) => {
@@ -151,7 +157,10 @@ export const MapViewScreen = () => {
                             );
                         })}
                     <Circle
-                        center={{ latitude: initialLocation[0], longitude: initialLocation[1] }}
+                        center={{
+                            latitude: initialLocation.latitude,
+                            longitude: initialLocation.longitude,
+                        }}
                         radius={1000 * distance}
                     />
                     {regionChange && (
@@ -190,7 +199,8 @@ export const MapViewScreen = () => {
 
             {/* <Text>{distanceLabel}Km</Text> */}
             <Text>
-                {initialLocation && `Your Location, ${initialLocation[0]}, ${initialLocation[1]}`}
+                {initialLocation &&
+                    `Your Location, ${initialLocation.latitude}, ${initialLocation.longitude}`}
             </Text>
             <Text>
                 {regionChange &&

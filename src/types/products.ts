@@ -1,3 +1,5 @@
+import { Geopoint } from 'geofire-common';
+
 export interface BasicProductData {
     img: string;
     name: string;
@@ -29,9 +31,8 @@ export interface DetailedProductData {
     qty?: number | undefined;
 }
 
-export type LocationArray = [number, number];
 
 export interface DistanceProducts {
-    loc: LocationArray | undefined;
+    loc: Geopoint;
     dis: number;
 }

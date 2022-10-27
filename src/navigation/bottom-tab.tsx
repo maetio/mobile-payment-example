@@ -5,7 +5,6 @@ import { ProfileScreen } from 'src/screens/profile-screen';
 import { MaterialCommunityIcons, MaterialIcons, AntDesign, Entypo } from '@expo/vector-icons';
 import { CartScreen } from 'src/screens/cart-screen';
 import { HomeStackNavigator } from './home-stack';
-import { MapScreen } from 'src/screens/map-screen';
 
 import { ExploreStack } from 'src/navigation/explore-stack';
 import { MapViewScreen } from 'src/screens/map-view-screen';
@@ -65,14 +64,7 @@ export const BottomTabNavigator: React.FC<{}> = () => {
                     tabBarIcon: HomeIcon,
                 }}
             />
-            {/* <Tabs.Screen
-                name="Explore"
-                component={ExploreScreen}
-                options={{
-                    headerTitle: 'Explore',
-                    tabBarIcon: ExploreIcon,
-                }}
-            /> */}
+
             <Tabs.Screen
                 name="Explore"
                 component={ExploreStack}
@@ -90,14 +82,7 @@ export const BottomTabNavigator: React.FC<{}> = () => {
                     tabBarIcon: CartIcon,
                 }}
             />
-            {/* <Tabs.Screen
-                name="Map"
-                component={MapScreen}
-                options={{
-                    headerTitle: 'Map',
-                    tabBarIcon: MapIcon,
-                }}
-            /> */}
+
             <Tabs.Screen
                 name="MapTest"
                 component={MapStack}
