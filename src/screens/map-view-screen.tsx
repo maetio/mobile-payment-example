@@ -44,7 +44,7 @@ export const MapViewScreen = () => {
         useFetchLocationProductsQuery(inputToRTK);
 
     useEffect(() => {
-        (async () => {
+        const setInitialState = async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
                 setErrorMsg('Permission to access location was denied');
@@ -67,7 +67,8 @@ export const MapViewScreen = () => {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
             });
-        })();
+        };
+        setInitialState();
     }, []);
 
     useEffect(() => {
@@ -90,7 +91,12 @@ export const MapViewScreen = () => {
 
     useEffect(() => {
         if (regionChange) {
-            const locGeopoint: Geopoint = [regionChange.latitude, regionChange.longitude];
+            // const locGeopoint = [regionChange.latitude, regionChange.longitude];
+            const locGeopoint = {
+                latitude: regionChange.latitude,
+                longitude: regionChange.longitude,
+            };
+
             const datas = {
                 loc: locGeopoint,
                 dis: regionChange.latitudeDelta * 500 * 110.9472,
@@ -135,27 +141,27 @@ export const MapViewScreen = () => {
                         coordinate={{
                             latitude: initialLocation.latitude,
                             longitude: initialLocation.longitude,
-                        }}></Marker>
+                        }}
+                    />
                     {product &&
-                        product.map((prod) => {
-                            return (
-                                <Marker
-                                    onPress={() => {
-                                        if (prod.id) {
-                                            navigation.navigate('Product', {
-                                                id: prod.id,
-                                            });
-                                        }
-                                    }}
-                                    key={prod.id}
-                                    title="Event"
-                                    pinColor="gold"
-                                    coordinate={{
-                                        latitude: prod.lat,
-                                        longitude: prod.long,
-                                    }}></Marker>
-                            );
-                        })}
+                        product.map((prod) => (
+                            <Marker
+                                onPress={() => {
+                                    if (prod.id) {
+                                        navigation.navigate('Product', {
+                                            id: prod.id,
+                                        });
+                                    }
+                                }}
+                                key={prod.id}
+                                title="Event"
+                                pinColor="gold"
+                                coordinate={{
+                                    latitude: prod.lat,
+                                    longitude: prod.long,
+                                }}
+                            />
+                        ))}
                     <Circle
                         center={{
                             latitude: initialLocation.latitude,

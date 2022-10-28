@@ -1,5 +1,5 @@
 import { Geopoint } from 'geofire-common';
-
+import MapView, { LatLng } from 'react-native-maps';
 export interface BasicProductData {
     img: string;
     name: string;
@@ -31,8 +31,17 @@ export interface DetailedProductData {
     qty?: number | undefined;
 }
 
+// export interface DistanceProducts {
+//     loc: Geopoint;
+//     dis: number;
+// }
+
+// export interface DistanceProducts {
+//     loc: number[];
+//     dis: number;
+// }
 
 export interface DistanceProducts {
-    loc: Geopoint;
+    loc: LatLng;
     dis: number;
 }
