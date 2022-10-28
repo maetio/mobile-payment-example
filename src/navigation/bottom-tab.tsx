@@ -54,7 +54,7 @@ const MapIcon = ({ focused, color, size }: TabBarIconProps) => (
 export const BottomTabNavigator: React.FC<{}> = () => {
     return (
         <Tabs.Navigator screenOptions={{ tabBarHideOnKeyboard: true }}>
-            <Tabs.Screen
+            {/* <Tabs.Screen
                 name="HomeTab"
                 component={HomeStackNavigator}
                 options={{
@@ -63,25 +63,25 @@ export const BottomTabNavigator: React.FC<{}> = () => {
                     headerShown: false,
                     tabBarIcon: HomeIcon,
                 }}
-            />
+            /> */}
 
-            <Tabs.Screen
+            {/* <Tabs.Screen
                 name="Explore"
                 component={ExploreStack}
                 options={{
                     headerTitle: 'Explore',
                     tabBarIcon: ExploreIcon,
                 }}
-            />
+            /> */}
 
-            <Tabs.Screen
+            {/* <Tabs.Screen
                 name="Cart"
                 component={CartStack}
                 options={{
                     headerTitle: 'Cart',
                     tabBarIcon: CartIcon,
                 }}
-            />
+            /> */}
 
             <Tabs.Screen
                 name="MapTest"

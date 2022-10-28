@@ -20,6 +20,9 @@ import { LatLng } from 'react-native-maps';
 export const fetchCloseData = async (location: LatLng, distance: number) => {
     const radius = distance;
 
+    console.log('radius');
+    console.log(radius / 1000);
+
     const locationGeopoint: Geopoint = [location.latitude, location.longitude];
 
     const bounds = geohashQueryBounds(locationGeopoint, radius);
@@ -35,8 +38,16 @@ export const fetchCloseData = async (location: LatLng, distance: number) => {
         );
 
         // add switch case that makes query bases off distance/bounds
+
+        let q;
+        if (radius/1000 < 4) {
+            q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
+        } else {
+            q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]), limit(3));
+        }
+
         // const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]), limit(3));
-        const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
+        // const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
 
         // const q = query(colRef, orderBy('geohash'));
 
@@ -73,6 +84,4 @@ export const fetchCloseData = async (location: LatLng, distance: number) => {
             distanceBetween([el2.lat, el2.long], locationGeopoint)
         );
     });
-
-    
 };
