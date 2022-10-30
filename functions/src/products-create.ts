@@ -1,9 +1,9 @@
 import * as functions from "firebase-functions";
 import {initializeApp} from "firebase-admin/app";
-import {firestore} from "firebase-admin";
+// import {firestore} from "firebase-admin";
 
 initializeApp();
-const db = firestore();
+// const db = firestore();
 
 export const createDetailedProduct = functions.firestore
     .document("basic-product-data/{productID}")
