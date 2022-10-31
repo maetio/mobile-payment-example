@@ -1,138 +1,87 @@
-import { collection, getDocs, query, orderBy, startAt, endAt, limit } from 'firebase/firestore';
+import {
+    collection,
+    getDocs,
+    query,
+    orderBy,
+    startAt,
+    endAt,
+    limit,
+    GeoPoint,
+} from 'firebase/firestore';
 import { geohashQueryBounds, distanceBetween } from 'geofire-common';
 import { db } from './firebase-config';
-import { BasicProductDataID, LocationArray } from 'src/types/products';
+import { BasicProductDataID } from 'src/types/products';
+// import { GeoPoint } from 'firebase/firestore';
+import { Geopoint } from 'geofire-common';
 import { BasicProductData } from 'src/types/products';
 import { converters } from './db-converters';
+import { LatLng } from 'react-native-maps';
 
-// export const fetchCloseData = async (location: LocationArray, distance: number) => {
-//     // const radius = 2000 * 1000;
-//     const radius = distance * 1000;
-//     // const radius = Infinity;
-
-//     if (location?.length === 2) {
-//         const bounds = geohashQueryBounds(location, radius);
-//         const promises = [];
-
-//         console.log(bounds);
-
-//         // Docs way
-
-//         for (const b of bounds) {
-//             const colRef = collection(db, 'basic-product-data').withConverter<BasicProductData>(
-//                 converters.productData,
-//             );
-//             const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]), limit(3));
-//             // const q = query(colRef, orderBy('geohash'));
-
-//             const datas = await getDocs(q);
-
-//             promises.push(datas);
-//         }
-
-//         const thing = await Promise.all(promises)
-//             .then((snapShots) => {
-//                 const matchingDocs: BasicProductData[] = [];
-
-//                 for (const snap of snapShots) {
-//                     for (const doc of snap.docs) {
-//                         const lat = doc.get('lat');
-//                         const lng = doc.get('long');
-
-//                         // console.log(lat);
-//                         // console.log(lng);
-
-//                         // We have to filter out a few false positives due to GeoHash
-//                         // accuracy, but most will match
-//                         const distanceInKm = distanceBetween([lat, lng], location);
-//                         const distanceInM = distanceInKm * 1000;
-//                         console.log(distanceInKm);
-//                         if (distanceInM <= radius) {
-//                             const locationProd = { ...doc.data(), id: doc.id };
-//                             matchingDocs.push(locationProd);
-//                         }
-//                     }
-//                 }
-//                 // console.log(matchingDocs);
-//                 return matchingDocs;
-//             })
-//             .then((matchingDocs) => {
-//                 // console.log(matchingDocs);
-//                 // return matchingDocs.reverse();
-
-//                 return matchingDocs.sort((el1, el2) => {
-//                     // console.log(el1.lat, el2.long);
-
-//                     return (
-//                         distanceBetween([el1.lat, el1.long], location) -
-//                         distanceBetween([el2.lat, el2.long], location)
-//                     );
-//                 });
-//             });
-//         // const thingers = await Promise.all(thing)
-//         // console.log(thing);
-//         return thing;
-//     }
-// };
-
-export const fetchCloseData = async (location: LocationArray, distance: number) => {
+export const fetchCloseData = async (location: LatLng, distance: number) => {
     const radius = distance;
-    // const radius = distance * 1000;
 
-    if (location?.length === 2) {
-        const bounds = geohashQueryBounds(location, radius);
-        console.log('bounds');
-        console.log(bounds);
-        const promises = [];
+    console.log('radius');
+    console.log(radius / 1000);
 
-        // Docs way
+    const locationGeopoint: Geopoint = [location.latitude, location.longitude];
 
-        for (const b of bounds) {
-            const colRef = collection(db, 'basic-product-data').withConverter<BasicProductData>(
-                converters.productData,
-            );
+    const bounds = geohashQueryBounds(locationGeopoint, radius);
+    console.log('bounds');
+    console.log(bounds);
+    const promises = [];
 
-            // add switch case that makes query bases off distance/bounds
-            const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]), limit(3));
-            // const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
+    // Docs way
 
-            // const q = query(colRef, orderBy('geohash'));
+    for (const b of bounds) {
+        const colRef = collection(db, 'basic-product-data').withConverter<BasicProductData>(
+            converters.productData,
+        );
 
-            const datas = await getDocs(q);
+        // add switch case that makes query bases off distance/bounds
 
-            promises.push(datas);
+        let q;
+        if (radius/1000 < 4) {
+            q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
+        } else {
+            q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]), limit(3));
         }
 
-        const thing = await Promise.all(promises);
+        // const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]), limit(3));
+        // const q = query(colRef, orderBy('geohash'), startAt(b[0]), endAt(b[1]));
 
-        const matchingDocs: BasicProductDataID[] = [];
+        // const q = query(colRef, orderBy('geohash'));
 
-        for (const snap of thing) {
-            for (const doc of snap.docs) {
-                const lat = doc.get('lat');
-                const lng = doc.get('long');
+        const datas = await getDocs(q);
 
-                // We have to filter out a few false positives due to GeoHash
-                // accuracy, but most will match
-                const distanceInKm = distanceBetween([lat, lng], location);
-                const distanceInM = distanceInKm * 1000;
-                console.log(distanceInKm);
-                if (distanceInM <= radius) {
-                    const locationProd = { ...doc.data(), id: doc.id, distanceInKm };
-                    matchingDocs.push(locationProd);
-                }
+        promises.push(datas);
+    }
+
+    const promiseSnapshot = await Promise.all(promises);
+
+    const matchingDocs: BasicProductDataID[] = [];
+
+    for (const snap of promiseSnapshot) {
+        for (const doc of snap.docs) {
+            const lat = doc.get('lat');
+            const lng = doc.get('long');
+
+            // We have to filter out a few false positives due to GeoHash
+            // accuracy, but most will match
+            const distanceInKm = distanceBetween([lat, lng], locationGeopoint);
+            const distanceInM = distanceInKm * 1000;
+            console.log(distanceInKm);
+            if (distanceInM <= radius) {
+                const locationProd = { ...doc.data(), id: doc.id, distanceInKm };
+                matchingDocs.push(locationProd);
             }
         }
-        // console.log(matchingDocs);
-
-        return matchingDocs.sort((el1, el2) => {
-            return (
-                distanceBetween([el1.lat, el1.long], location) -
-                distanceBetween([el2.lat, el2.long], location)
-            );
-        });
-
-        // const thingers = await Promise.all(thing)
-        // console.log(thing);
     }
+    // console.log(matchingDocs);
+
+    return matchingDocs.sort((el1, el2) => {
+        return (
+            distanceBetween([el1.lat, el1.long], locationGeopoint) -
+            distanceBetween([el2.lat, el2.long], locationGeopoint)
+        );
+    });
 };
